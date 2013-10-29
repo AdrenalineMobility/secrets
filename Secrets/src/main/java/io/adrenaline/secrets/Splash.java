@@ -1,4 +1,4 @@
-package com.adrenaline.secrets;
+package io.adrenaline.secrets;
 
 import android.content.Intent;
 import android.os.AsyncTask;

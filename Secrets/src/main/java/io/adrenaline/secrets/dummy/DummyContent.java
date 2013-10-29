@@ -1,4 +1,4 @@
-package com.adrenaline.secrets.dummy;
+package io.adrenaline.secrets.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

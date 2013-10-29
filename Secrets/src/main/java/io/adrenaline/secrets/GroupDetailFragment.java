@@ -1,4 +1,4 @@
-package com.adrenaline.secrets;
+package io.adrenaline.secrets;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.adrenaline.secrets.dummy.DummyContent;
+import io.adrenaline.secrets.dummy.DummyContent;
 
 /**
  * A fragment representing a single Group detail screen.

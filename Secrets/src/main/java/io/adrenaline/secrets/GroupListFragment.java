@@ -1,4 +1,4 @@
-package com.adrenaline.secrets;
+package io.adrenaline.secrets;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.adrenaline.secrets.dummy.DummyContent;
+import io.adrenaline.secrets.dummy.DummyContent;
 
 /**
  * A list fragment representing a list of Groups. This fragment
