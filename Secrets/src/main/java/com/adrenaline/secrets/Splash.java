@@ -91,6 +91,7 @@ public class Splash extends ActionBarActivity {
         public PlaceholderFragment() {
         }
 
+        /*
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -102,6 +103,7 @@ public class Splash extends ActionBarActivity {
 
             return rootView;
         }
+        */
 
     }
 }
