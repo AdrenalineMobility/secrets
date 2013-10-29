@@ -1,7 +1,8 @@
 package com.adrenaline.secrets;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -53,6 +54,13 @@ public class Splash extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void goToActivity(View view) {
+        Intent intent = new Intent(this, GroupListActivity.class);
+        startActivity(intent);
+        // Do something in response to button
+    }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -94,6 +102,6 @@ public class Splash extends ActionBarActivity {
 
             return rootView;
         }
-    }
 
+    }
 }
