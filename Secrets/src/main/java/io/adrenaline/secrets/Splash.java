@@ -15,7 +15,7 @@ public class Splash extends Activity {
         setContentView(R.layout.activity_splash);
 
 
-        final TextView button = (TextView) findViewById(R.id.login_button);
+        final Button button = (Button) findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Splash.this, GroupListActivity.class));
