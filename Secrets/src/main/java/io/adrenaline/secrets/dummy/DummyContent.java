@@ -16,21 +16,21 @@ public class DummyContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static List<DummyGroup> ITEMS = new ArrayList<DummyGroup>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static Map<String, DummyGroup> ITEM_MAP = new HashMap<String, DummyGroup>();
 
     static {
         // Add 3 sample items.
-        addItem(new DummyItem("1", "Item 1"));
-        addItem(new DummyItem("2", "Item 2"));
-        addItem(new DummyItem("3", "Item 3"));
+        addItem(new DummyGroup("1", "Item 1"));
+        addItem(new DummyGroup("2", "Item 2"));
+        addItem(new DummyGroup("3", "Item 3"));
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(DummyGroup item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
@@ -38,11 +38,11 @@ public class DummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
+    public static class DummyGroup {
         public String id;
         public String content;
 
-        public DummyItem(String id, String content) {
+        public DummyGroup(String id, String content) {
             this.id = id;
             this.content = content;
         }

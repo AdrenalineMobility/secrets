@@ -25,7 +25,7 @@ public class GroupDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private DummyContent.DummyGroup mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
