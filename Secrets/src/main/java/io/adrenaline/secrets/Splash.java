@@ -19,6 +19,7 @@ public class Splash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // If we start with other activities, we should call this under Application.onCreate
         AdrenalineIo.init(getApplicationContext());
 
         final TextView button = (TextView) findViewById(R.id.login_button);
