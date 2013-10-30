@@ -21,12 +21,10 @@ public class Splash extends ActionBarActivity {
 
         AdrenalineIo.init(getApplicationContext());
 
-        final TextView button = (TextView) findViewById(R.id.sign_up_link);
-        final Activity that = this;
+        final TextView button = (TextView) findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(that, GroupListActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(Splash.this, GroupListActivity.class));
             }
         });
     }
