@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class LogInFragment extends Fragment {
@@ -51,6 +52,11 @@ public class LogInFragment extends Fragment {
                 mCreateAccountListener.onCreateAccountPressed();
             }
         });
+
+        EditText email = (EditText) rootView.findViewById(R.id.username);
+        if (SecretsApplication.email() != null) {
+            email.setText(SecretsApplication.email());
+        }
 
         return rootView;
     }
