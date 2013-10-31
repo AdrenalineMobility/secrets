@@ -18,7 +18,7 @@ public class Splash extends Activity {
         final Button button = (Button) findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(Splash.this, GroupListActivity.class));
+                startActivity(new Intent(Splash.this, LogInActivity.class));
             }
         });
 

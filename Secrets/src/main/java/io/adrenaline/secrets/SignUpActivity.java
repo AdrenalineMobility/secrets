@@ -1,7 +1,6 @@
 package io.adrenaline.secrets;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
 public class SignUpActivity extends Activity {
@@ -9,7 +8,7 @@ public class SignUpActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_sign_up_log_in);
     }
 
 }
