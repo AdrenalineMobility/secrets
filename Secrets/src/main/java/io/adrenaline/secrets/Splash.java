@@ -19,6 +19,7 @@ public class Splash extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Splash.this, LogInActivity.class));
+                overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
             }
         });
 
@@ -26,6 +27,7 @@ public class Splash extends Activity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Splash.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
             }
         });
     }

@@ -11,4 +11,9 @@ public class SignUpActivity extends Activity {
         setContentView(R.layout.activity_sign_up_log_in);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_down_in, R.anim.slide_down_out);
+    }
 }
