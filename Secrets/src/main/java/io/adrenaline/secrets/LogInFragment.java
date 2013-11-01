@@ -3,14 +3,18 @@ package io.adrenaline.secrets;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class LogInFragment extends Fragment {
     private OnLogInListener mLogInListener;
+    private EditText mUsername;
+    private EditText mPassword;
 
     public interface OnLogInListener {
         public void onCreateAccountPressed();
@@ -38,6 +42,9 @@ public class LogInFragment extends Fragment {
         if (rootView == null)
             return null;
 
+        mUsername = (EditText) rootView.findViewById(R.id.username);
+        mPassword = (EditText) rootView.findViewById(R.id.password);
+
         // tweak the text on the action button to reflect login instead
         // of account creation
         Button actionBtn = (Button) rootView.findViewById(R.id.create_account_log_in);
@@ -45,8 +52,22 @@ public class LogInFragment extends Fragment {
         actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(LogInFragment.this);
-                dialog.setText("Logging in...");
+                if (mUsername == null || mPassword == null)
+                    return;
+
+                String username = LogInSignUpActivity.extractString(mUsername, true);
+                if (TextUtils.isEmpty(username)) {
+                    mUsername.setError("Please enter username");
+                    return;
+                }
+
+                String password = LogInSignUpActivity.extractString(mPassword);
+                if (TextUtils.isEmpty(password)) {
+                    mPassword.setError("Please enter password");
+                    return;
+                }
+
+                mLogInListener.onLogIn(username, password);
             }
         });
 

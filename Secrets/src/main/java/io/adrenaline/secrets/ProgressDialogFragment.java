@@ -1,5 +1,6 @@
 package io.adrenaline.secrets;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,8 +17,8 @@ public class ProgressDialogFragment extends DialogFragment {
     private TextView mText;
     private String mPendingText;
 
-    public static ProgressDialogFragment showDialog(Fragment fragment) {
-        FragmentManager fm = fragment.getFragmentManager();
+    public static ProgressDialogFragment showDialog(Activity activity) {
+        FragmentManager fm = activity.getFragmentManager();
         ProgressDialogFragment dialog = new ProgressDialogFragment();
         if (fm == null) {
             Log.e(TAG, "Could not get fragment manager, not showing progress dialog");

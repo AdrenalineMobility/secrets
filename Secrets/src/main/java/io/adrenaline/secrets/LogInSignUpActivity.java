@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.widget.EditText;
 
 public class LogInSignUpActivity extends ActionBarActivity
         implements LogInFragment.OnLogInListener,
@@ -71,11 +74,32 @@ public class LogInSignUpActivity extends ActionBarActivity
 
     @Override
     public void onSignUp(String username, String password) {
-
+        ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
+        dialog.setText("Signing up " + username + "...");
     }
 
     @Override
     public void onLogIn(String username, String password) {
+        ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
+        dialog.setText("Logging in " + username + "...");
+    }
 
+    static String extractString(EditText edit) {
+        return extractString(edit, false);
+    }
+
+    static String extractString(EditText edit, boolean trim) {
+        Editable editable = edit.getText();
+        // ugg, lint
+        if (editable == null || TextUtils.isEmpty(editable)) {
+            return "";
+        }
+
+        String str = editable.toString();
+        if (trim) {
+            return str.trim();
+        } else {
+            return str;
+        }
     }
 }
