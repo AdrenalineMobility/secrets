@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class SignUpFragment extends Fragment {
@@ -33,6 +34,15 @@ public class SignUpFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_signup, container, false);
         if (rootView == null)
             return null;
+
+        Button actionBtn = (Button) rootView.findViewById(R.id.create_account_log_in);
+        actionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(SignUpFragment.this);
+                dialog.setText("Creating account...");
+            }
+        });
 
         TextView bottomTxt = (TextView) rootView.findViewById(R.id.bottom_text);
         bottomTxt.setOnClickListener(new View.OnClickListener() {

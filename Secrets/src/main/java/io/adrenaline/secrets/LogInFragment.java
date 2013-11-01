@@ -2,6 +2,7 @@ package io.adrenaline.secrets;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,13 @@ public class LogInFragment extends Fragment {
         // of account creation
         Button actionBtn = (Button) rootView.findViewById(R.id.create_account_log_in);
         actionBtn.setText(R.string.login);
+        actionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(LogInFragment.this);
+                dialog.setText("Logging in...");
+            }
+        });
 
         TextView bottomTxt = (TextView) rootView.findViewById(R.id.bottom_text);
         bottomTxt.setText(R.string.need_to_create_account);
