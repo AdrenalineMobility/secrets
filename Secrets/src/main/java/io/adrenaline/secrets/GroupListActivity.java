@@ -66,7 +66,7 @@ public class GroupListActivity extends FragmentActivity
             arguments.putString(GroupDetailFragment.ARG_ITEM_ID, id);
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .replace(R.id.group_detail_container, fragment)
                     .commit();
 

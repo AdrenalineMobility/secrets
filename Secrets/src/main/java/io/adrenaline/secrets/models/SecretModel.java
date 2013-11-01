@@ -3,8 +3,6 @@ package io.adrenaline.secrets.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.adrenaline.secrets.R;
-
 public abstract class SecretModel {
     private static final String NAME = "name";
     protected static final String CONTENT = "content";
