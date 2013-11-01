@@ -6,11 +6,16 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
+
+import io.adrenaline.ApiResponse;
 
 public class LogInSignUpActivity extends ActionBarActivity
         implements LogInFragment.OnLogInListener,
         SignUpFragment.OnSignUpListener {
+
+    private static final String TAG = "LogInSignUpActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +81,34 @@ public class LogInSignUpActivity extends ActionBarActivity
     public void onSignUp(String username, String password) {
         ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
         dialog.setText("Signing up " + username + "...");
+
+        AdrenalineAsync.signUpAsync(username, password, new AdrenalineAsync.ApiDeferred() {
+            @Override
+            public void done(ApiResponse response) {
+                Log.d(TAG, "Signed up!");
+            }
+            @Override
+            public void fail(ApiResponse response) {
+                Log.e(TAG, "Could not sign up " + response.status());
+            }
+        });
     }
 
     @Override
     public void onLogIn(String username, String password) {
         ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
         dialog.setText("Logging in " + username + "...");
+
+        AdrenalineAsync.logInAsync(username, password, new AdrenalineAsync.ApiDeferred() {
+            @Override
+            public void done(ApiResponse response) {
+                Log.d(TAG, "Logged In!");
+            }
+            @Override
+            public void fail(ApiResponse response) {
+                Log.e(TAG, "Could not log in " + response.status());
+            }
+        });
     }
 
     static String extractString(EditText edit) {
