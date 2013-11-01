@@ -6,10 +6,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import io.adrenaline.User;
+
 public class Splash extends Activity {
     private static final String TAG = "AdrenalineSecrets";
 
     public final static String START_AS_LOGIN = "io.adrenaline.secrets.START_AS_LOGIN";
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // if we're already logged in, go to group list activity
+        if (User.getCurrentUser() != null) {
+            Intent intent = new Intent(this, GroupListActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
