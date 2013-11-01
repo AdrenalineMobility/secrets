@@ -6,8 +6,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 public class LogInSignUpActivity extends ActionBarActivity
-        implements LogInFragment.OnCreateAccountPressedListener,
-        SignUpFragment.OnHaveAccountPressedListener {
+        implements LogInFragment.OnLogInListener,
+        SignUpFragment.OnSignUpListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +67,15 @@ public class LogInSignUpActivity extends ActionBarActivity
     @Override
     public void onHaveAccountPressed() {
         switchFragment(new LogInFragment());
+    }
+
+    @Override
+    public void onSignUp(String username, String password) {
+
+    }
+
+    @Override
+    public void onLogIn(String username, String password) {
+
     }
 }

@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class SignUpFragment extends Fragment {
-    OnHaveAccountPressedListener mHaveAccountPressedListener;
+    private OnSignUpListener mSignUpListener;
 
-    public interface OnHaveAccountPressedListener {
+    public interface OnSignUpListener {
         public void onHaveAccountPressed();
+        public void onSignUp(String username, String password);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class SignUpFragment extends Fragment {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mHaveAccountPressedListener = (OnHaveAccountPressedListener) activity;
+            mSignUpListener = (OnSignUpListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHaveAccountPressedListener");
@@ -48,7 +49,7 @@ public class SignUpFragment extends Fragment {
         bottomTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mHaveAccountPressedListener.onHaveAccountPressed();
+                mSignUpListener.onHaveAccountPressed();
             }
         });
         return rootView;

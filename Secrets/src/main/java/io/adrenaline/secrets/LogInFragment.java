@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class LogInFragment extends Fragment {
-    OnCreateAccountPressedListener mCreateAccountListener;
+    private OnLogInListener mLogInListener;
 
-    public interface OnCreateAccountPressedListener {
+    public interface OnLogInListener {
         public void onCreateAccountPressed();
+        public void onLogIn(String username, String password);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class LogInFragment extends Fragment {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCreateAccountListener = (OnCreateAccountPressedListener) activity;
+            mLogInListener = (OnLogInListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnCreateAccountPressedListener");
@@ -55,7 +56,7 @@ public class LogInFragment extends Fragment {
         bottomTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCreateAccountListener.onCreateAccountPressed();
+                mLogInListener.onCreateAccountPressed();
             }
         });
 
