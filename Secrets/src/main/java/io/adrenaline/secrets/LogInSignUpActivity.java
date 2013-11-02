@@ -105,6 +105,7 @@ public class LogInSignUpActivity extends ActionBarActivity
         final ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
         dialog.setText("Logging in " + username + "...");
 
+
         AdrenalineAsync.logInAsync(username, password, new AdrenalineAsync.ApiDeferred() {
             @Override
             public void done(ApiResponse response) {

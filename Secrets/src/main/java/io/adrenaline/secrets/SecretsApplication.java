@@ -10,5 +10,6 @@ public class SecretsApplication extends Application{
         super.onCreate();
 
         AdrenalineIo.init(getApplicationContext());
+
     }
 }
