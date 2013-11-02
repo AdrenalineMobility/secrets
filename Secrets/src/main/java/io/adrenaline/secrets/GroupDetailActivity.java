@@ -2,8 +2,10 @@ package io.adrenaline.secrets;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 /**
@@ -15,7 +17,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link GroupDetailFragment}.
  */
-public class GroupDetailActivity extends FragmentActivity {
+public class GroupDetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class GroupDetailActivity extends FragmentActivity {
                     getIntent().getStringExtra(GroupDetailFragment.ARG_ITEM_ID));
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.group_detail_container, fragment)
                     .commit();
         }
@@ -61,7 +63,25 @@ public class GroupDetailActivity extends FragmentActivity {
                 //
                 NavUtils.navigateUpTo(this, new Intent(this, GroupListActivity.class));
                 return true;
+            case R.id.action_add_person:
+                return true;
+            case R.id.action_general_info:
+                GroupInfoFragment fragment = new GroupInfoFragment();
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
+                        .add(R.id.group_detail_container, fragment)
+                        .commit();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.group_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
 }
