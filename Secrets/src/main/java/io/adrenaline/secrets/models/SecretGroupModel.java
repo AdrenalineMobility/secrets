@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 public class SecretGroupModel {
     private static final String NAME = "name";
@@ -13,6 +14,12 @@ public class SecretGroupModel {
     private static final String SECRETS = "secrets";
     private static final String LAST_MODIFIED_TIME = "last_modified_time";
     private static final String LAST_MODIFIER = "modifier";
+
+    // test only
+    protected static SecretGroupModel create() {
+        SecretGroupModel model = new SecretGroupModel(GroupType.values()[Math.abs(new Random().nextInt()) % 2], new Random().nextInt() + "");
+        return model;
+    }
 
     public enum GroupType {
         PASSWORD,

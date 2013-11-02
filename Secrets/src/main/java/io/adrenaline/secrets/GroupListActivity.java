@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
+
 
 /**
  * An activity representing a list of Groups. This activity
@@ -22,7 +25,7 @@ import android.support.v4.app.FragmentActivity;
  * to listen for item selections.
  */
 public class GroupListActivity extends FragmentActivity
-        implements GroupListFragment.Callbacks {
+        implements GroupListFragment.Callbacks, GroupListEntryRelativeLayout.Callbacks {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -57,13 +60,13 @@ public class GroupListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(SecretGroupModel group) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(GroupDetailFragment.ARG_ITEM_ID, id);
+            //arguments.putString(GroupDetailFragment.ARG_ITEM_ID, id);
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -74,8 +77,40 @@ public class GroupListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, GroupDetailActivity.class);
-            detailIntent.putExtra(GroupDetailFragment.ARG_ITEM_ID, id);
+            //detailIntent.putExtra(GroupDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
+        }
+    }
+
+    @Override
+    public void onEntrySelected(SecretGroupModel group) {
+        onItemSelected(group);
+    }
+
+    @Override
+    public void onEntryInfoClicked(SecretGroupModel group) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+            GroupInfoFragment fragment = new GroupInfoFragment();
+            fragment.setArguments(arguments);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.group_detail_container, fragment)
+                    .commit();
+
+        } else {
+            // In single-pane mode, simply start the detail activity
+            // for the selected item ID.
+            Bundle arguments = new Bundle();
+            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+            GroupInfoFragment fragment = new GroupInfoFragment();
+            fragment.setArguments(arguments);
+            getFragmentManager().beginTransaction()
+                    .add(R.id.group_list_container, fragment)
+                    .commit();
         }
     }
 }

@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class GroupInfoFragment extends Fragment {
+    public static final String ARG_CONTAINER_ID = "container_id";
+
     private String mLastModifiedFormat;
     private String mLastModifiedByMeFormat;
     private String mLastOpenedByMeFormat;

@@ -6,10 +6,10 @@ import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import io.adrenaline.secrets.dummy.DummyContent;
+import io.adrenaline.secrets.models.SecretGroupAdapter;
+import io.adrenaline.secrets.models.SecretGroupModel;
 
 /**
  * A list fragment representing a list of Groups. This fragment
@@ -38,6 +38,7 @@ public class GroupListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+    private SecretGroupAdapter mAdapter;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -48,7 +49,7 @@ public class GroupListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(SecretGroupModel group);
     }
 
     /**
@@ -57,7 +58,7 @@ public class GroupListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(SecretGroupModel group) {
         }
     };
 
@@ -66,18 +67,14 @@ public class GroupListFragment extends ListFragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public GroupListFragment() {
+        mAdapter = new SecretGroupAdapter();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyGroup>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        setListAdapter(mAdapter);
 
         setHasOptionsMenu(true);
     }
@@ -119,7 +116,7 @@ public class GroupListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(mAdapter.getItem(position));
     }
 
     @Override
