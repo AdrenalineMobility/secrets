@@ -5,14 +5,21 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import io.adrenaline.AdrenalineIo;
+import io.adrenaline.ApiResponse;
 
 public class SignUpFragment extends Fragment {
+    private static final String TAG = "SignUpFragment";
     private OnSignUpListener mSignUpListener;
     private EditText mUsername;
     private EditText mPassword;
@@ -20,7 +27,6 @@ public class SignUpFragment extends Fragment {
 
     public interface OnSignUpListener {
         public void onHaveAccountPressed();
-        public void onSignUp(String username, String password);
     }
 
     @Override
@@ -47,6 +53,18 @@ public class SignUpFragment extends Fragment {
         mUsername = (EditText) rootView.findViewById(R.id.username);
         mPassword = (EditText) rootView.findViewById(R.id.password);
         mVerifyPassword = (EditText) rootView.findViewById(R.id.verify_password);
+
+        // clear the error message if the user starts to modify the username
+        mUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                mUsername.setError(null);
+            }
+        });
 
         Button actionBtn = (Button) rootView.findViewById(R.id.create_account_log_in);
         actionBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +96,7 @@ public class SignUpFragment extends Fragment {
                     return;
                 }
 
-                mSignUpListener.onSignUp(username, password);
+                onSignUp(username, password);
             }
         });
 
@@ -90,5 +108,35 @@ public class SignUpFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void onSignUp(String username, String password) {
+        final ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(getActivity());
+        dialog.setText("Signing up " + username + "...");
+
+        AdrenalineAsync.signUpAsync(username, password, new AdrenalineAsync.ApiDeferred() {
+            @Override
+            public void done(ApiResponse response) {
+                Log.d(TAG, "Signed up!");
+                dialog.dismiss();
+                if (getActivity() != null)
+                    getActivity().finish();
+            }
+            @Override
+            public void fail(ApiResponse response) {
+                String err = "Could not sign up " + response.status();
+                Log.e(TAG, err);
+                dialog.dismiss();
+
+                if (response.status().equals("error_user_exists")) {
+                    mUsername.setError("Username already taken");
+                    mUsername.requestFocus();
+                } else {
+                    Activity activity = getActivity();
+                    if (activity != null && activity.getApplicationContext() != null)
+                        Toast.makeText(activity.getApplicationContext(), err, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

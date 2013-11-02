@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import io.adrenaline.AdrenalineIo;
 import io.adrenaline.ApiResponse;
 
 public class LogInSignUpActivity extends ActionBarActivity
@@ -76,51 +77,6 @@ public class LogInSignUpActivity extends ActionBarActivity
     @Override
     public void onHaveAccountPressed() {
         switchFragment(new LogInFragment());
-    }
-
-    @Override
-    public void onSignUp(String username, String password) {
-        final ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
-        dialog.setText("Signing up " + username + "...");
-
-        AdrenalineAsync.signUpAsync(username, password, new AdrenalineAsync.ApiDeferred() {
-            @Override
-            public void done(ApiResponse response) {
-                Log.d(TAG, "Signed up!");
-                dialog.dismiss();
-                finish();
-            }
-            @Override
-            public void fail(ApiResponse response) {
-                String err = "Could not sign up " + response.status();
-                Log.e(TAG, err);
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(), err, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @Override
-    public void onLogIn(String username, String password) {
-        final ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(this);
-        dialog.setText("Logging in " + username + "...");
-
-
-        AdrenalineAsync.logInAsync(username, password, new AdrenalineAsync.ApiDeferred() {
-            @Override
-            public void done(ApiResponse response) {
-                Log.d(TAG, "Logged In!");
-                dialog.dismiss();
-                finish();
-            }
-            @Override
-            public void fail(ApiResponse response) {
-                String err = "Could not log in " + response.status();
-                Log.e(TAG, err);
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(), err, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     static String extractString(EditText edit) {

@@ -66,7 +66,7 @@ public class AdrenalineAsync {
             Log.e(TAG, "ERROR!!! you tried to login/signup when there was already a login/signup request in flight");
             return false;
         }
-        new LogInSignUpAsync(deferred, true).execute(username, password);
+        new LogInSignUpAsync(deferred, isLogIn).execute(username, password);
         mRequestInFlight = true;
         mLock.unlock();
 
