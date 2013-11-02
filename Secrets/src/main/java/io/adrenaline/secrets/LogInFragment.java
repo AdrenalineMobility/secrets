@@ -68,7 +68,6 @@ public class LogInFragment extends Fragment {
         // tweak the text on the action button to reflect login instead
         // of account creation
         Button actionBtn = (Button) rootView.findViewById(R.id.create_account_log_in);
-        actionBtn.setText(R.string.login);
         actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,8 +91,6 @@ public class LogInFragment extends Fragment {
         });
 
         TextView bottomTxt = (TextView) rootView.findViewById(R.id.bottom_text);
-        bottomTxt.setText(R.string.need_to_create_account);
-
         bottomTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
