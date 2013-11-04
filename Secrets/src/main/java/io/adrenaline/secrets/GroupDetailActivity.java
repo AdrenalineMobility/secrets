@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import io.adrenaline.secrets.models.Secrets;
+
 /**
  * An activity representing a single Group detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
@@ -18,6 +20,7 @@ import android.view.MenuItem;
  * more than a {@link GroupDetailFragment}.
  */
 public class GroupDetailActivity extends Activity {
+    private int mIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +43,8 @@ public class GroupDetailActivity extends Activity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX,
-                    getIntent().getIntExtra(GroupDetailFragment.ARG_GROUP_INDEX, -1));
+            mIndex = getIntent().getIntExtra(GroupDetailFragment.ARG_GROUP_INDEX, -1);
+            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, mIndex);
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -66,7 +69,11 @@ public class GroupDetailActivity extends Activity {
             case R.id.action_add_person:
                 return true;
             case R.id.action_general_info:
+                Bundle arguments = new Bundle();
+                arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+                arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, mIndex);
                 GroupInfoFragment fragment = new GroupInfoFragment();
+                fragment.setArguments(arguments);
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
                         .add(R.id.group_detail_container, fragment)
