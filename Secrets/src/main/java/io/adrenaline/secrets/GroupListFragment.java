@@ -6,10 +6,10 @@ import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import io.adrenaline.secrets.models.SecretGroupAdapter;
-import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.Secrets;
 
 /**
  * A list fragment representing a list of Groups. This fragment
@@ -38,7 +38,7 @@ public class GroupListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
-    private SecretGroupAdapter mAdapter;
+    private BaseAdapter mAdapter;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -48,8 +48,9 @@ public class GroupListFragment extends ListFragment {
     public interface Callbacks {
         /**
          * Callback for when an item has been selected.
+         * @param index
          */
-        public void onItemSelected(SecretGroupModel group);
+        public void onItemSelected(int index);
     }
 
     /**
@@ -58,7 +59,7 @@ public class GroupListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(SecretGroupModel group) {
+        public void onItemSelected(int index) {
         }
     };
 
@@ -67,7 +68,7 @@ public class GroupListFragment extends ListFragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public GroupListFragment() {
-        mAdapter = new SecretGroupAdapter();
+        mAdapter = Secrets.getAdapter();
     }
 
     @Override
@@ -116,7 +117,7 @@ public class GroupListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(mAdapter.getItem(position));
+        mCallbacks.onItemSelected(position);
     }
 
     @Override

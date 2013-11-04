@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 
 
@@ -58,15 +57,16 @@ public class GroupListActivity extends FragmentActivity
     /**
      * Callback method from {@link GroupListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
+     * @param index
      */
     @Override
-    public void onItemSelected(SecretGroupModel group) {
+    public void onItemSelected(int index) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            //arguments.putString(GroupDetailFragment.ARG_ITEM_ID, id);
+            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -77,24 +77,25 @@ public class GroupListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, GroupDetailActivity.class);
-            //detailIntent.putExtra(GroupDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(GroupDetailFragment.ARG_GROUP_INDEX, index);
             startActivity(detailIntent);
         }
     }
 
     @Override
-    public void onEntrySelected(SecretGroupModel group) {
-        onItemSelected(group);
+    public void onEntrySelected(int index) {
+        onItemSelected(index);
     }
 
     @Override
-    public void onEntryInfoClicked(SecretGroupModel group) {
+    public void onEntryInfoClicked(int index) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
             GroupInfoFragment fragment = new GroupInfoFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -105,7 +106,8 @@ public class GroupListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Bundle arguments = new Bundle();
-            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_list_container);
+            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
             GroupInfoFragment fragment = new GroupInfoFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()

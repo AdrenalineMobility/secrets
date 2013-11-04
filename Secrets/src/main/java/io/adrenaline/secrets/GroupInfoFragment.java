@@ -15,6 +15,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.Secrets;
+
 public class GroupInfoFragment extends Fragment {
     public static final String ARG_CONTAINER_ID = "container_id";
 
@@ -32,6 +35,7 @@ public class GroupInfoFragment extends Fragment {
     private TextView mLastOpenedByMe;
 
     private ActionMode mActionMode;
+    private SecretGroupModel mSecretGroup;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -40,6 +44,11 @@ public class GroupInfoFragment extends Fragment {
         mLastModifiedFormat = getResources().getString(R.string.fragment_group_info_general_info_modified);
         mLastModifiedByMeFormat = getResources().getString(R.string.fragment_group_info_general_info_modified_by_me);
         mLastOpenedByMeFormat = getResources().getString(R.string.fragment_group_info_general_info_opened_by_me);
+
+        if (getArguments().containsKey(GroupDetailFragment.ARG_GROUP_INDEX)) {
+            // Load the group content specified by the fragment
+            mSecretGroup = Secrets.getSecretGroup(getArguments().getInt(GroupDetailFragment.ARG_GROUP_INDEX));
+        }
     }
 
 
@@ -69,11 +78,13 @@ public class GroupInfoFragment extends Fragment {
         }
         // Start the CAB using the ActionMode.Callback defined below
         mActionMode = getActivity().startActionMode(mActionModeCallback);
+        mGroupTitle.setText(mSecretGroup.getName());
+        updateGeneralInfoPanel();
     }
 
     private void updateGeneralInfoPanel() {
-        String modifiedTime = "";
-        String modifier = "";
+        String modifiedTime = mSecretGroup.getModifiedTime().toString();
+        String modifier = mSecretGroup.getModifier();
         String modifiedByMeTime = "";
         String openedByMeTime = "";
         mLastModified.setText(String.format(mLastModifiedFormat, modifiedTime, modifier));
