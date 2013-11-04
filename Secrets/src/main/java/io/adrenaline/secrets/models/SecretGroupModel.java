@@ -1,5 +1,11 @@
 package io.adrenaline.secrets.models;
 
+import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +13,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+
+import io.adrenaline.secrets.R;
+import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 
 public class SecretGroupModel {
     private static final String NAME = "name";
@@ -121,4 +130,5 @@ public class SecretGroupModel {
         object.put(LAST_MODIFIER, mModifier);
         return object;
     }
+
 }

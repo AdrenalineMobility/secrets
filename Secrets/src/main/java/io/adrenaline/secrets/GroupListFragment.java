@@ -6,9 +6,9 @@ import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import io.adrenaline.secrets.models.SecretGroupAdapter;
 import io.adrenaline.secrets.models.Secrets;
 
 /**
@@ -38,7 +38,7 @@ public class GroupListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
-    private SecretGroupAdapter mAdapter;
+    private BaseAdapter mAdapter;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -68,7 +68,7 @@ public class GroupListFragment extends ListFragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public GroupListFragment() {
-        mAdapter = new SecretGroupAdapter();
+        mAdapter = Secrets.getAdapter();
     }
 
     @Override
@@ -76,7 +76,6 @@ public class GroupListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         setListAdapter(mAdapter);
-        Secrets.setListener(mAdapter);
 
         setHasOptionsMenu(true);
     }
