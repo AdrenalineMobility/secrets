@@ -16,6 +16,8 @@ import java.util.Random;
 
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
+import io.adrenaline.secrets.views.NoteSecretEntryRelativeLayout;
+import io.adrenaline.secrets.views.PasswordSecretEntryRelativeLayout;
 
 public class SecretGroupModel {
     private static final String NAME = "name";
@@ -24,10 +26,35 @@ public class SecretGroupModel {
     private static final String LAST_MODIFIED_TIME = "last_modified_time";
     private static final String LAST_MODIFIER = "modifier";
 
+    public static interface SecretGroupListener {
+        public void onSecretGroupChanged();
+    }
+
+    private SecretGroupListener mListener;
+
+    public void setListener(SecretGroupListener l) {
+        mListener = l;
+    }
+
     // test only
-    protected static SecretGroupModel create() {
+    protected static SecretGroupModel createRandomData() {
         SecretGroupModel model = new SecretGroupModel(GroupType.values()[Math.abs(new Random().nextInt()) % 2], new Random().nextInt() + "");
         model.setId(new Random().nextInt() + "");
+        if (model.getType() == GroupType.NOTE) {
+            for (int i = 0; i < 5; ++i) {
+                byte[] content = new byte[100];
+                new Random().nextBytes(content);
+                NoteSecretModel note = new NoteSecretModel("Note " + i, new String(content));
+                model.addSecret(note);
+            }
+        } else if (model.getType() == GroupType.PASSWORD) {
+            for (int i = 0; i < 5; ++i) {
+                byte[] content = new byte[100];
+                new Random().nextBytes(content);
+                PasswordSecretModel password = new PasswordSecretModel("Password " + i, "google.com", "username", "password");
+                model.addSecret(password);
+            }
+        }
         return model;
     }
 
@@ -131,4 +158,66 @@ public class SecretGroupModel {
         return object;
     }
 
+    private SecretGroupAdapter mAdapter;
+
+    public BaseAdapter getAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new SecretGroupAdapter();
+            SecretGroupModel.this.setListener(mAdapter);
+        }
+        return mAdapter;
+    }
+
+    private class SecretGroupAdapter extends BaseAdapter implements SecretGroupListener {
+
+        @Override
+        public int getCount() {
+            return SecretGroupModel.this.getNumOfSecrets();
+        }
+
+        @Override
+        public SecretModel getItem(int position) {
+            return SecretGroupModel.this.getSecret(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            SecretModel secret = getItem(position);
+            if (secret.getType() == GroupType.NOTE) {
+                NoteSecretEntryRelativeLayout noteEntry;
+                if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
+                    noteEntry = (NoteSecretEntryRelativeLayout) convertView;
+                } else {
+                    LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
+                    noteEntry = (NoteSecretEntryRelativeLayout) inflater.inflate(R.layout.note_secret_list_entry, parent, false);
+                }
+
+                noteEntry.update((NoteSecretModel) getItem(position));
+                return noteEntry;
+            } else if (secret.getType() == GroupType.PASSWORD){
+                PasswordSecretEntryRelativeLayout passwordEntry;
+                if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
+                    passwordEntry = (PasswordSecretEntryRelativeLayout) convertView;
+                } else {
+                    LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
+                    passwordEntry = (PasswordSecretEntryRelativeLayout) inflater.inflate(R.layout.password_secret_list_entry, parent, false);
+                }
+
+                passwordEntry.update((PasswordSecretModel) getItem(position));
+                return passwordEntry;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void onSecretGroupChanged() {
+            notifyDataSetChanged();
+        }
+    }
 }

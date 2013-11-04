@@ -48,9 +48,9 @@ public class GroupListFragment extends ListFragment {
     public interface Callbacks {
         /**
          * Callback for when an item has been selected.
-         * @param id
+         * @param index
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(int index);
     }
 
     /**
@@ -59,7 +59,7 @@ public class GroupListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(int index) {
         }
     };
 
@@ -117,7 +117,7 @@ public class GroupListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(Secrets.getSecretGroup(position).getId());
+        mCallbacks.onItemSelected(position);
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.Secrets;
 
 /**
  * Created by stang6 on 11/1/13.
@@ -26,25 +27,25 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
     public interface Callbacks {
         /**
          * Callback for when an the entry has been selected.
-         * @param id
+         * @param index
          */
-        public void onEntrySelected(String id);
+        public void onEntrySelected(int index);
         /**
          * Callback for when an the show info button is clicked.
-         * @param id
+         * @param index
          */
-        public void onEntryInfoClicked(String id);
+        public void onEntryInfoClicked(int index);
     }
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onEntrySelected(String id) {
+        public void onEntrySelected(int index) {
         }
 
         @Override
-        public void onEntryInfoClicked(String id) {
+        public void onEntryInfoClicked(int index) {
         }
     };
 
@@ -72,7 +73,7 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if (mGroup != null) {
-                    mCallbacks.onEntryInfoClicked(mGroup.getId());
+                    mCallbacks.onEntryInfoClicked(Secrets.indexOfSecretGroup(mGroup));
                 }
             }
         });
@@ -80,7 +81,7 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if (mGroup != null) {
-                    mCallbacks.onEntrySelected(mGroup.getId());
+                    mCallbacks.onEntrySelected(Secrets.indexOfSecretGroup(mGroup));
                 }
             }
         });

@@ -23,7 +23,7 @@ public class Secrets {
 
     /*package*/ static void generateRandomData() {
         for (int i = 0; i < 5; ++i) {
-            Secrets.addSecretGroup(SecretGroupModel.create());
+            Secrets.addSecretGroup(SecretGroupModel.createRandomData());
         }
     }
 
@@ -60,23 +60,27 @@ public class Secrets {
         return null;
     }
 
+    public static int indexOfSecretGroup(SecretGroupModel group) {
+        return sSecrets.indexOf(group);
+    }
+
     public static int numOfGroups() {
         return sSecrets.size();
     }
 
-    private static SecretGroupAdapter sAdapter;
+    private static SecretsAdapter sAdapter;
     public static BaseAdapter getAdapter() {
         if (sAdapter == null) {
-            sAdapter = new SecretGroupAdapter();
+            sAdapter = new SecretsAdapter();
             Secrets.setListener(sAdapter);
         }
 
         return sAdapter;
     }
 
-    private static class SecretGroupAdapter extends BaseAdapter implements Secrets.SecretsListener {
+    private static class SecretsAdapter extends BaseAdapter implements Secrets.SecretsListener {
 
-        private SecretGroupAdapter() {
+        private SecretsAdapter() {
             if (Secrets.numOfGroups() == 0) {
                 Secrets.generateRandomData();
             }
