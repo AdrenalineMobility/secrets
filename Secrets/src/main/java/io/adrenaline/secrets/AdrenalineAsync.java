@@ -1,6 +1,7 @@
 package io.adrenaline.secrets;
 
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,62 +22,70 @@ public class AdrenalineAsync {
         public void fail(ApiResponse response){}
     }
 
-    private static class LogInSignUpAsync extends AsyncTask<String, Void, ApiResponse> {
+    private static class LogInSignUpAsync extends Thread {
         private ApiDeferred mDeferred;
         private boolean mIsLogIn;
-        public LogInSignUpAsync(ApiDeferred deferred, boolean isLogIn) {
+        private String mUsername;
+        private String mPassword;
+        private Activity mActivity;
+
+        public LogInSignUpAsync(Activity activity, String username, String password, ApiDeferred deferred, boolean isLogIn) {
             if (deferred == null) {
                 mDeferred = new ApiDeferred();
             } else {
                 mDeferred = deferred;
             }
             mIsLogIn = isLogIn;
-        }
-        @Override
-        protected ApiResponse doInBackground(String... arg0) {
-            String username = arg0[0];
-            String password = arg0[1];
-            ApiResponse response;
-            if (mIsLogIn) {
-                response = User.logIn(username, password);
-            } else {
-                response = User.signUp(username, password);
-            }
-            return response;
+            mUsername = username;
+            mPassword = password;
+            mActivity = activity;
         }
 
         @Override
-        protected void onPostExecute(ApiResponse response) {
+        public void run() {
+            ApiResponse response;
+            if (mIsLogIn) {
+                response = User.logIn(mUsername, mPassword);
+            } else {
+                response = User.signUp(mUsername, mPassword);
+            }
+
             mLock.lock();
             mRequestInFlight = false;
             mLock.unlock();
 
-            if (!response.ok()) {
-                mDeferred.fail(response);
-            } else {
-                mDeferred.done(response);
-            }
+            final ApiResponse resp = response;
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!resp.ok()) {
+                        mDeferred.fail(resp);
+                    } else {
+                        mDeferred.done(resp);
+                    }
+                }
+            });
         }
     }
 
-    private static boolean logInSignUp(String username, String password, ApiDeferred deferred, boolean isLogIn) {
+    private static boolean logInSignUp(Activity activity, String username, String password, ApiDeferred deferred, boolean isLogIn) {
         mLock.lock();
         if (mRequestInFlight) {
             mLock.unlock();
             Log.e(TAG, "ERROR!!! you tried to login/signup when there was already a login/signup request in flight");
             return false;
         }
-        new LogInSignUpAsync(deferred, isLogIn).execute(username, password);
+        new LogInSignUpAsync(activity, username, password, deferred, isLogIn).start();
         mRequestInFlight = true;
         mLock.unlock();
 
         return true;
     }
 
-    public static boolean logInAsync(String username, String password, ApiDeferred deferred) {
-        return logInSignUp(username, password, deferred, true);
+    public static boolean logInAsync(Activity activity, String username, String password, ApiDeferred deferred) {
+        return logInSignUp(activity, username, password, deferred, true);
     }
-    public static boolean signUpAsync(String username, String password, ApiDeferred deferred) {
-        return logInSignUp(username, password, deferred, false);
+    public static boolean signUpAsync(Activity activity, String username, String password, ApiDeferred deferred) {
+        return logInSignUp(activity, username, password, deferred, false);
     }
 }
