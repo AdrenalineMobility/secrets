@@ -26,23 +26,25 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
     public interface Callbacks {
         /**
          * Callback for when an the entry has been selected.
+         * @param id
          */
-        public void onEntrySelected(SecretGroupModel group);
+        public void onEntrySelected(String id);
         /**
          * Callback for when an the show info button is clicked.
+         * @param id
          */
-        public void onEntryInfoClicked(SecretGroupModel group);
+        public void onEntryInfoClicked(String id);
     }
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onEntrySelected(SecretGroupModel group) {
+        public void onEntrySelected(String id) {
         }
 
         @Override
-        public void onEntryInfoClicked(SecretGroupModel group) {
+        public void onEntryInfoClicked(String id) {
         }
     };
 
@@ -70,7 +72,7 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if (mGroup != null) {
-                    mCallbacks.onEntryInfoClicked(mGroup);
+                    mCallbacks.onEntryInfoClicked(mGroup.getId());
                 }
             }
         });
@@ -78,7 +80,7 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if (mGroup != null) {
-                    mCallbacks.onEntrySelected(mGroup);
+                    mCallbacks.onEntrySelected(mGroup.getId());
                 }
             }
         });

@@ -18,6 +18,7 @@ public class SecretGroupModel {
     // test only
     protected static SecretGroupModel create() {
         SecretGroupModel model = new SecretGroupModel(GroupType.values()[Math.abs(new Random().nextInt()) % 2], new Random().nextInt() + "");
+        model.setId(new Random().nextInt() + "");
         return model;
     }
 
@@ -26,6 +27,7 @@ public class SecretGroupModel {
         NOTE,
     }
 
+    private String mId;
     private GroupType mType;
     private String mName;
     private ArrayList<SecretModel> mSecrets = new ArrayList<SecretModel>();
@@ -48,6 +50,14 @@ public class SecretGroupModel {
         }
         mLastModified = new Date(object.optLong(LAST_MODIFIED_TIME, new Date().getTime()));
         mModifier = object.optString(LAST_MODIFIER, mModifier);
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
+
+    public String getId() {
+        return mId;
     }
 
     public Object getACL() {

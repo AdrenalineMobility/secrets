@@ -40,8 +40,8 @@ public class GroupDetailActivity extends Activity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(GroupDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(GroupDetailFragment.ARG_ITEM_ID));
+            arguments.putString(GroupDetailFragment.ARG_GROUP_ID,
+                    getIntent().getStringExtra(GroupDetailFragment.ARG_GROUP_ID));
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import io.adrenaline.secrets.models.SecretGroupAdapter;
-import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.Secrets;
 
 /**
  * A list fragment representing a list of Groups. This fragment
@@ -48,8 +48,9 @@ public class GroupListFragment extends ListFragment {
     public interface Callbacks {
         /**
          * Callback for when an item has been selected.
+         * @param id
          */
-        public void onItemSelected(SecretGroupModel group);
+        public void onItemSelected(String id);
     }
 
     /**
@@ -58,7 +59,7 @@ public class GroupListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(SecretGroupModel group) {
+        public void onItemSelected(String id) {
         }
     };
 
@@ -75,6 +76,7 @@ public class GroupListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         setListAdapter(mAdapter);
+        Secrets.setListener(mAdapter);
 
         setHasOptionsMenu(true);
     }
@@ -116,7 +118,7 @@ public class GroupListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(mAdapter.getItem(position));
+        mCallbacks.onItemSelected(Secrets.getSecretGroup(position).getId());
     }
 
     @Override

@@ -7,33 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import java.util.ArrayList;
-
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 
 /**
  * Created by stang6 on 11/1/13.
  */
-public class SecretGroupAdapter extends BaseAdapter {
-    private ArrayList<SecretGroupModel> mSecretGroups;
+public class SecretGroupAdapter extends BaseAdapter implements Secrets.SecretsListener {
 
     public SecretGroupAdapter() {
-        // FIXME
-        mSecretGroups = new ArrayList<SecretGroupModel>();
-        for (int i = 0; i < 5; ++i) {
-            mSecretGroups.add(SecretGroupModel.create());
+        if (Secrets.numOfGroups() == 0) {
+            Secrets.generateRandomData();
         }
     }
 
     @Override
     public int getCount() {
-        return mSecretGroups.size();
+        return Secrets.numOfGroups();
     }
 
     @Override
     public SecretGroupModel getItem(int position) {
-        return mSecretGroups.get(position);
+        return Secrets.getSecretGroup(position);
     }
 
     @Override
@@ -53,5 +48,10 @@ public class SecretGroupAdapter extends BaseAdapter {
 
         groupEntry.update(getItem(position));
         return groupEntry;
+    }
+
+    @Override
+    public void onSecretsChanged() {
+        notifyDataSetChanged();
     }
 }
