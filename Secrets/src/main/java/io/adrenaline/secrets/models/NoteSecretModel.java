@@ -31,6 +31,11 @@ public class NoteSecretModel extends SecretModel {
     }
 
     @Override
+    public String getLabels() {
+        return getNote();
+    }
+
+    @Override
     public SecretGroupModel.GroupType getType() {
         return SecretGroupModel.GroupType.NOTE;
     }

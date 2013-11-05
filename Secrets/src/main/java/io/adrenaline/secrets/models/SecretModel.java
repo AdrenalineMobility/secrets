@@ -44,5 +44,7 @@ public abstract class SecretModel {
         }
         return null;
     }
+
+    public abstract String getLabels();
 }
 

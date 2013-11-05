@@ -37,6 +37,11 @@ public class PasswordSecretModel extends SecretModel {
     }
 
     @Override
+    public String getLabels() {
+        return getUsername() + "@" + getWebSite();
+    }
+
+    @Override
     public SecretGroupModel.GroupType getType() {
         return SecretGroupModel.GroupType.PASSWORD;
     }
