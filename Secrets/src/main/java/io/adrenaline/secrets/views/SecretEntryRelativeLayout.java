@@ -9,19 +9,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
-import io.adrenaline.secrets.models.NoteSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.SecretModel;
 
 /**
  * Created by stang6 on 11/5/13.
  */
-public class SecretEntryRelativeLayout extends RelativeLayout {
+public abstract class SecretEntryRelativeLayout extends RelativeLayout {
     private SecretModel mSecret;
     private ImageView mIcon;
     private TextView mName;
     private TextView mLabels;
-    private ImageButton mToggle;
+    private ImageButton mEdit;
+    private View mDetails;
+    private boolean mShowingDetails = false;
 
     public SecretEntryRelativeLayout(Context context) {
         super(context);
@@ -42,7 +43,22 @@ public class SecretEntryRelativeLayout extends RelativeLayout {
         mIcon = (ImageView) findViewById(R.id.secret_icon);
         mName = (TextView) findViewById(R.id.secret_name);
         mLabels = (TextView) findViewById(R.id.secret_labels);
-        mToggle = (ImageButton) findViewById(R.id.toggle_secret);
+        mEdit = (ImageButton) findViewById(R.id.edit_secret);
+        mDetails = findViewById(R.id.secret_details);
+
+        mEdit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO pop up editing dialog
+            }
+        });
+
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggle(!mShowingDetails);
+            }
+        });
     }
 
     public void update(SecretModel secret) {
@@ -58,5 +74,14 @@ public class SecretEntryRelativeLayout extends RelativeLayout {
 
         mName.setText(secret.getName());
         mLabels.setText(secret.getLabels());
+    }
+
+    public void toggle(boolean show) {
+        mShowingDetails = show;
+        if (show) {
+            mDetails.setVisibility(View.VISIBLE);
+        } else {
+            mDetails.setVisibility(View.GONE);
+        }
     }
 }

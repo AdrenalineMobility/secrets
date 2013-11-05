@@ -42,4 +42,5 @@ public class NoteSecretEntryRelativeLayout extends SecretEntryRelativeLayout {
 
         mNote = note;
     }
+
 }
