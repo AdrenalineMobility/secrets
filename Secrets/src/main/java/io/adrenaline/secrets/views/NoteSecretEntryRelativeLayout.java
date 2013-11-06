@@ -17,7 +17,8 @@ import io.adrenaline.secrets.models.SecretModel;
  */
 public class NoteSecretEntryRelativeLayout extends SecretEntryRelativeLayout {
 
-    private SecretModel mNote;
+    private NoteSecretModel mNote;
+    private TextView mNoteView;
 
     public NoteSecretEntryRelativeLayout(Context context) {
         super(context);
@@ -34,13 +35,16 @@ public class NoteSecretEntryRelativeLayout extends SecretEntryRelativeLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+
+        mNoteView = (TextView) addDetailView(R.layout.note_secret_detail).findViewById(R.id.secret_note);
     }
 
     @Override
     public void update(SecretModel note) {
         super.update(note);
 
-        mNote = note;
+        mNote = (NoteSecretModel) note;
+        mNoteView.setText(mNote.getNote());
     }
 
 }

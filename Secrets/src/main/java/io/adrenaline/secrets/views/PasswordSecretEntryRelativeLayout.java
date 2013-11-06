@@ -35,6 +35,8 @@ public class PasswordSecretEntryRelativeLayout extends SecretEntryRelativeLayout
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        addDetailView(R.layout.password_secret_detail);
+
     }
 
     @Override
