@@ -76,23 +76,27 @@ public class SignUpFragment extends Fragment {
                 String username = LogInSignUpActivity.extractString(mUsername, true);
                 if (TextUtils.isEmpty(username)) {
                     mUsername.setError("Please enter username");
+                    mUsername.requestFocus();
                     return;
                 }
 
                 String password = LogInSignUpActivity.extractString(mPassword);
                 if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Please enter password");
+                    mPassword.requestFocus();
                     return;
                 }
 
                 String verifyPassword = LogInSignUpActivity.extractString(mVerifyPassword);
                 if (TextUtils.isEmpty(verifyPassword)) {
                     mVerifyPassword.setError("Please verify password");
+                    mVerifyPassword.requestFocus();
                     return;
                 }
 
                 if (!verifyPassword.equals(password)) {
                     mVerifyPassword.setError("Passwords don't match");
+                    mVerifyPassword.requestFocus();
                     return;
                 }
 
