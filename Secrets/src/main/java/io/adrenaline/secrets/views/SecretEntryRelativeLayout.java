@@ -2,6 +2,7 @@ package io.adrenaline.secrets.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,8 +81,12 @@ public abstract class SecretEntryRelativeLayout extends RelativeLayout {
         mShowingDetails = show;
         if (show) {
             mDetails.setVisibility(View.VISIBLE);
+            mName.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            mLabels.setVisibility(View.GONE);
         } else {
             mDetails.setVisibility(View.GONE);
+            mName.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+            mLabels.setVisibility(View.VISIBLE);
         }
     }
 }
