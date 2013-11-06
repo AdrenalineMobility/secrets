@@ -36,7 +36,7 @@ public class NoteSecretEntryRelativeLayout extends SecretEntryRelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mNoteView = (TextView) findViewById(R.id.secret_note);
+        mNoteView = (TextView) addDetailView(R.layout.note_secret_detail).findViewById(R.id.secret_note);
     }
 
     @Override

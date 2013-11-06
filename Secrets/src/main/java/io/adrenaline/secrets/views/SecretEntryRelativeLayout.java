@@ -1,9 +1,12 @@
 package io.adrenaline.secrets.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,6 +63,10 @@ public abstract class SecretEntryRelativeLayout extends RelativeLayout {
                 toggle(!mShowingDetails);
             }
         });
+    }
+
+    protected ViewGroup addDetailView(int resId) {
+        return (ViewGroup) inflate(this.getContext(), resId, (ViewGroup) mDetails);
     }
 
     public void update(SecretModel secret) {

@@ -44,6 +44,9 @@ public class SecretGroupModel {
             for (int i = 0; i < 5; ++i) {
                 byte[] content = new byte[100];
                 new Random().nextBytes(content);
+                for (int j = 0; j < content.length; ++j) {
+                    content[j] = (byte) ('a' + content[j] % 26);
+                }
                 NoteSecretModel note = new NoteSecretModel("Note " + i, new String(content));
                 model.addSecret(note);
             }
