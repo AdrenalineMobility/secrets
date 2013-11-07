@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import io.adrenaline.secrets.R;
@@ -21,7 +22,6 @@ import io.adrenaline.secrets.views.PasswordSecretEntryRelativeLayout;
 
 public class SecretGroupModel {
     private static final String NAME = "name";
-    private static final String TYPE = "type";
     private static final String SECRETS = "secrets";
     private static final String LAST_MODIFIED_TIME = "last_modified_time";
     private static final String LAST_MODIFIER = "modifier";
@@ -38,10 +38,11 @@ public class SecretGroupModel {
 
     // test only
     protected static SecretGroupModel createRandomData() {
-        SecretGroupModel model = new SecretGroupModel(GroupType.values()[Math.abs(new Random().nextInt()) % 2], new Random().nextInt() + "");
+        SecretGroupModel model = new SecretGroupModel(new Random().nextInt() + "");
         model.setId(new Random().nextInt() + "");
-        if (model.getType() == GroupType.NOTE) {
-            for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 5; ++i) {
+            SecretModel.GroupType type = SecretModel.GroupType.values()[Math.abs(new Random().nextInt()) % 2];
+            if (type == SecretModel.GroupType.NOTE) {
                 byte[] content = new byte[100];
                 new Random().nextBytes(content);
                 for (int j = 0; j < content.length; ++j) {
@@ -49,43 +50,34 @@ public class SecretGroupModel {
                 }
                 NoteSecretModel note = new NoteSecretModel("Note " + i, new String(content));
                 model.addSecret(note);
-            }
-        } else if (model.getType() == GroupType.PASSWORD) {
-            for (int i = 0; i < 5; ++i) {
+            } else if (type == SecretModel.GroupType.PASSWORD) {
                 byte[] content = new byte[100];
                 new Random().nextBytes(content);
                 PasswordSecretModel password = new PasswordSecretModel("Password " + i, "google.com", "username", "password");
                 model.addSecret(password);
             }
         }
+
         return model;
     }
 
-    public enum GroupType {
-        PASSWORD,
-        NOTE,
-    }
-
     private String mId;
-    private GroupType mType;
     private String mName;
     private ArrayList<SecretModel> mSecrets = new ArrayList<SecretModel>();
     private Date mLastModified;
     private String mModifier;
 
-    public SecretGroupModel(GroupType type, String name) {
-        mType = type;
+    public SecretGroupModel(String name) {
         mName = name;
         mLastModified = new Date();
         mModifier = "me";
     }
 
     public SecretGroupModel(JSONObject object) throws JSONException {
-        mType = GroupType.valueOf(object.getString(TYPE));
         mName = object.getString(NAME);
         JSONArray secrets = object.getJSONArray(SECRETS);
         for (int i = 0; i < secrets.length(); ++i) {
-            mSecrets.add(SecretModel.create(mType, secrets.getJSONObject(i)));
+            mSecrets.add(SecretModel.create(secrets.getJSONObject(i)));
         }
         mLastModified = new Date(object.optLong(LAST_MODIFIED_TIME, new Date().getTime()));
         mModifier = object.optString(LAST_MODIFIER, mModifier);
@@ -99,12 +91,8 @@ public class SecretGroupModel {
         return mId;
     }
 
-    public Object getACL() {
-        return null;
-    }
-
-    public GroupType getType() {
-        return mType;
+    public List getACL() {
+        return new ArrayList();
     }
 
     public String getName() {
@@ -132,10 +120,7 @@ public class SecretGroupModel {
     }
 
     public boolean addSecret(SecretModel secret) {
-        if (secret.getType() == this.getType()) {
-            return mSecrets.add(secret);
-        }
-        return false;
+        return mSecrets.add(secret);
     }
 
     public Date getModifiedTime() {
@@ -148,7 +133,6 @@ public class SecretGroupModel {
 
     public JSONObject toJSONObject() throws JSONException {
         JSONObject object = new JSONObject();
-        object.put(TYPE, mType.toString());
         object.put(NAME, mName);
         JSONArray secrets = new JSONArray();
         for (SecretModel secret : mSecrets) {
@@ -191,7 +175,7 @@ public class SecretGroupModel {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             SecretModel secret = getItem(position);
-            if (secret.getType() == GroupType.NOTE) {
+            if (secret.getType() == SecretModel.GroupType.NOTE) {
                 NoteSecretEntryRelativeLayout noteEntry;
                 if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
                     noteEntry = (NoteSecretEntryRelativeLayout) convertView;
@@ -202,7 +186,7 @@ public class SecretGroupModel {
 
                 noteEntry.update((NoteSecretModel) getItem(position));
                 return noteEntry;
-            } else if (secret.getType() == GroupType.PASSWORD){
+            } else if (secret.getType() == SecretModel.GroupType.PASSWORD) {
                 PasswordSecretEntryRelativeLayout passwordEntry;
                 if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
                     passwordEntry = (PasswordSecretEntryRelativeLayout) convertView;

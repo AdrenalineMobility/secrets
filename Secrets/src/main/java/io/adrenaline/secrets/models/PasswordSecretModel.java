@@ -42,8 +42,8 @@ public class PasswordSecretModel extends SecretModel {
     }
 
     @Override
-    public SecretGroupModel.GroupType getType() {
-        return SecretGroupModel.GroupType.PASSWORD;
+    public GroupType getType() {
+        return GroupType.PASSWORD;
     }
 
     public String getWebSite() {

@@ -90,12 +90,11 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
     public void update(SecretGroupModel group) {
         mGroup = group;
         // FIXME
-        if (group.getType() == SecretGroupModel.GroupType.NOTE) {
-            mGroupIcon.setImageResource(R.drawable.ic_launcher);
+        if (mGroup.getACL().size() > 1) {
+            mGroupIcon.setImageResource(R.drawable.ic_action_group);
         } else {
-            mGroupIcon.setImageResource(R.drawable.ic_launcher);
+            mGroupIcon.setImageResource(R.drawable.ic_action_person);
         }
-
         mGroupName.setText(group.getName());
         mGroupLabels.setText(group.getModifiedTime().toString());
     }

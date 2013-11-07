@@ -72,9 +72,9 @@ public abstract class SecretEntryRelativeLayout extends RelativeLayout {
     public void update(SecretModel secret) {
         mSecret = secret;
 
-        if (mSecret.getType() == SecretGroupModel.GroupType.NOTE) {
+        if (mSecret.getType() == SecretModel.GroupType.NOTE) {
             mIcon.setImageResource(R.drawable.ic_note);
-        } else if (mSecret.getType() == SecretGroupModel.GroupType.PASSWORD) {
+        } else if (mSecret.getType() == SecretModel.GroupType.PASSWORD) {
             mIcon.setImageResource(R.drawable.ic_password);
         } else {
             return;
