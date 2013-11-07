@@ -1,8 +1,13 @@
 package io.adrenaline.secrets;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -39,6 +44,8 @@ public class GroupDetailFragment extends Fragment {
             // Load the group content specified by the fragment
             mSecretGroup = Secrets.getSecretGroup(getArguments().getInt(ARG_GROUP_INDEX));
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -54,4 +61,32 @@ public class GroupDetailFragment extends Fragment {
 
         return rootView;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_person:
+                return true;
+            case R.id.action_general_info:
+                Bundle arguments = new Bundle();
+                arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+                arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
+                GroupInfoFragment fragment = new GroupInfoFragment();
+                fragment.setArguments(arguments);
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
+                        .add(R.id.group_detail_container, fragment)
+                        .commit();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.group_detail, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 }
