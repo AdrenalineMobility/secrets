@@ -66,7 +66,7 @@ public class GroupDetailFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_person:
+            case R.id.action_add_secret:
                 return true;
             case R.id.action_general_info:
                 Bundle arguments = new Bundle();
