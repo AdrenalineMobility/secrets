@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import java.util.zip.Inflater;
 
+import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.Secrets;
+
 /**
  * Created by stang6 on 11/7/13.
  */
@@ -30,11 +33,11 @@ public class CreateGroupDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View content = inflater.inflate(R.layout.dialog_create_group_edittext, null);
         builder.setView(content);
-        TextView groupName = (TextView) content.findViewById(R.id.group_name_field);
+        final TextView groupName = (TextView) content.findViewById(R.id.group_name_field);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // FIRE ZE MISSILES!
+                Secrets.addSecretGroup(new SecretGroupModel(SecretGroupModel.GroupType.NOTE, groupName.getText().toString()));
             }
         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
