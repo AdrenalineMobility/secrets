@@ -37,7 +37,7 @@ public class CreateGroupDialogFragment extends DialogFragment {
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Secrets.addSecretGroup(new SecretGroupModel(SecretGroupModel.GroupType.NOTE, groupName.getText().toString()));
+                Secrets.addSecretGroup(new SecretGroupModel(groupName.getText().toString()));
             }
         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
