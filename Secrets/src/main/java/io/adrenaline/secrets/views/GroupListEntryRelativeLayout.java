@@ -91,9 +91,9 @@ public class GroupListEntryRelativeLayout extends RelativeLayout {
         mGroup = group;
         // FIXME
         if (mGroup.getACL().size() > 1) {
-            mGroupIcon.setImageResource(R.drawable.ic_action_group);
+            mGroupIcon.setImageResource(R.drawable.ic_shared_group);
         } else {
-            mGroupIcon.setImageResource(R.drawable.ic_action_person);
+            mGroupIcon.setImageResource(R.drawable.ic_private_group);
         }
         mGroupName.setText(group.getName());
         mGroupLabels.setText(group.getModifiedTime().toString());

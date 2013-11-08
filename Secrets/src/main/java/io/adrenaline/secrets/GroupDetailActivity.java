@@ -20,7 +20,6 @@ import io.adrenaline.secrets.models.Secrets;
  * more than a {@link GroupDetailFragment}.
  */
 public class GroupDetailActivity extends Activity {
-    private int mIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +42,8 @@ public class GroupDetailActivity extends Activity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            mIndex = getIntent().getIntExtra(GroupDetailFragment.ARG_GROUP_INDEX, -1);
-            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, mIndex);
+            int index = getIntent().getIntExtra(GroupDetailFragment.ARG_GROUP_INDEX, -1);
+            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -66,29 +65,8 @@ public class GroupDetailActivity extends Activity {
                 //
                 NavUtils.navigateUpTo(this, new Intent(this, GroupListActivity.class));
                 return true;
-            case R.id.action_add_person:
-                return true;
-            case R.id.action_general_info:
-                Bundle arguments = new Bundle();
-                arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
-                arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, mIndex);
-                GroupInfoFragment fragment = new GroupInfoFragment();
-                fragment.setArguments(arguments);
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
-                        .add(R.id.group_detail_container, fragment)
-                        .commit();
-                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.group_detail, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }

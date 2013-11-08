@@ -2,10 +2,6 @@ package io.adrenaline.secrets.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
