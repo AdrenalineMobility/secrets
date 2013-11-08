@@ -1,9 +1,7 @@
 package io.adrenaline.secrets;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import io.adrenaline.secrets.editor.SecretEditorFragment;
+import io.adrenaline.secrets.models.NoteSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
 
@@ -62,22 +62,39 @@ public class GroupDetailFragment extends Fragment {
         return rootView;
     }
 
+    private void createNoteSecret() {
+        Bundle arguments = new Bundle();
+        arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+        arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
+        SecretEditorFragment fragment = new SecretEditorFragment(new NoteSecretModel("", ""));
+        fragment.setArguments(arguments);
+        getFragmentManager().beginTransaction()
+                .add(R.id.group_detail_container, fragment)
+                .commit();
+    }
+
+    private void openInfoPanel() {
+        Bundle arguments = new Bundle();
+        arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
+        arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
+        GroupInfoFragment fragment = new GroupInfoFragment();
+        fragment.setArguments(arguments);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
+                .add(R.id.group_detail_container, fragment)
+                .commit();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_secret:
+            case R.id.action_add_note_secret:
+                createNoteSecret();
+                return true;
+            case R.id.action_add_password_secret:
                 return true;
             case R.id.action_general_info:
-                Bundle arguments = new Bundle();
-                arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
-                arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
-                GroupInfoFragment fragment = new GroupInfoFragment();
-                fragment.setArguments(arguments);
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
-                        .add(R.id.group_detail_container, fragment)
-                        .commit();
+                openInfoPanel();
                 return true;
         }
         return super.onOptionsItemSelected(item);
