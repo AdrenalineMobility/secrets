@@ -69,6 +69,7 @@ public class GroupDetailFragment extends Fragment {
         SecretEditorFragment fragment = new SecretEditorFragment(new NoteSecretModel("", ""));
         fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.editor_in, R.anim.editor_in)
                 .add(R.id.group_detail_container, fragment)
                 .commit();
     }

@@ -1,6 +1,8 @@
 package io.adrenaline.secrets.editor;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.Service;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -9,6 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.models.SecretModel;
@@ -20,6 +25,7 @@ public class SecretEditorFragment extends Fragment {
 
     private final SecretModel mSecret;
     private ActionMode mActionMode;
+    private TextView mTitleField;
 
     public SecretEditorFragment(SecretModel secret) {
         mSecret = secret;
@@ -36,6 +42,11 @@ public class SecretEditorFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_secret_editor, container, false);
 
+        mTitleField = (TextView) rootView.findViewById(R.id.editor_title);
+
+        mTitleField.requestFocus();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
         return rootView;
     }
 
@@ -48,6 +59,9 @@ public class SecretEditorFragment extends Fragment {
         }
         // Start the CAB using the ActionMode.Callback defined below
         mActionMode = getActivity().startActionMode(mActionModeCallback);
+
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mTitleField, 0);
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -85,7 +99,13 @@ public class SecretEditorFragment extends Fragment {
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
 
-            getActivity().getFragmentManager().beginTransaction().remove(SecretEditorFragment.this).commit();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+            getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                    .remove(SecretEditorFragment.this).commit();
         }
     };
 }
