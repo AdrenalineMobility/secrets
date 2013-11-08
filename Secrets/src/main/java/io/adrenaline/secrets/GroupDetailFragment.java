@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import io.adrenaline.secrets.editor.NoteSecretEditorFragment;
 import io.adrenaline.secrets.editor.SecretEditorFragment;
 import io.adrenaline.secrets.models.NoteSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
@@ -66,7 +67,7 @@ public class GroupDetailFragment extends Fragment {
         Bundle arguments = new Bundle();
         arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
         arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
-        SecretEditorFragment fragment = new SecretEditorFragment(new NoteSecretModel("", ""));
+        SecretEditorFragment fragment = new NoteSecretEditorFragment(new NoteSecretModel("", ""));
         fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.editor_in, R.anim.editor_in)

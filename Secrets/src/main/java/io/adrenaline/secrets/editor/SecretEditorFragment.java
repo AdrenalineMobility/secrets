@@ -21,11 +21,12 @@ import io.adrenaline.secrets.models.SecretModel;
 /**
  * Created by stang6 on 11/7/13.
  */
-public class SecretEditorFragment extends Fragment {
+public abstract class SecretEditorFragment extends Fragment {
 
     private final SecretModel mSecret;
     private ActionMode mActionMode;
     private TextView mTitleField;
+    private ViewGroup mEditorContent;
 
     public SecretEditorFragment(SecretModel secret) {
         mSecret = secret;
@@ -42,12 +43,17 @@ public class SecretEditorFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_secret_editor, container, false);
 
+        mEditorContent = (ViewGroup) rootView.findViewById(R.id.editor_content);
         mTitleField = (TextView) rootView.findViewById(R.id.editor_title);
 
         mTitleField.requestFocus();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
+        
         return rootView;
+    }
+
+    protected final View setEditorContent(int resId) {
+        return View.inflate(getActivity(), resId, mEditorContent);
     }
 
     @Override
@@ -62,6 +68,12 @@ public class SecretEditorFragment extends Fragment {
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mTitleField, 0);
+
+        update();
+    }
+
+    protected void update() {
+        mTitleField.setText(mSecret.getName());
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
