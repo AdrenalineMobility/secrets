@@ -1,5 +1,7 @@
 package io.adrenaline.secrets.views;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -50,7 +52,7 @@ public abstract class SecretEntryRelativeLayout extends RelativeLayout {
         mEdit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO pop up editing dialog
+                mCallbacks.onEditSecretClicked(mSecret);
             }
         });
 
@@ -92,5 +94,40 @@ public abstract class SecretEntryRelativeLayout extends RelativeLayout {
             mName.setGravity(Gravity.LEFT | Gravity.BOTTOM);
             mLabels.setVisibility(View.VISIBLE);
         }
+    }
+
+    public interface Callbacks {
+        /**
+         * Callback for when an the edit button is clicked.
+         * @param secret
+         */
+        public void onEditSecretClicked(SecretModel secret);
+    }
+
+    private Callbacks mCallbacks = sDummyCallbacks;
+
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+
+        @Override
+        public void onEditSecretClicked(SecretModel secret) {
+        }
+    };
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        Activity activity = (Activity) getContext();
+        Fragment fragment = activity.getFragmentManager().findFragmentById(R.id.group_detail_container);
+        if (fragment instanceof Callbacks) {
+            mCallbacks = (Callbacks) fragment;
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        mCallbacks = sDummyCallbacks;
     }
 }

@@ -14,7 +14,9 @@ import io.adrenaline.secrets.editor.NoteSecretEditorFragment;
 import io.adrenaline.secrets.editor.SecretEditorFragment;
 import io.adrenaline.secrets.models.NoteSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
+import io.adrenaline.secrets.models.SecretModel;
 import io.adrenaline.secrets.models.Secrets;
+import io.adrenaline.secrets.views.SecretEntryRelativeLayout;
 
 /**
  * A fragment representing a single Group detail screen.
@@ -22,7 +24,7 @@ import io.adrenaline.secrets.models.Secrets;
  * in two-pane mode (on tablets) or a {@link GroupDetailActivity}
  * on handsets.
  */
-public class GroupDetailFragment extends Fragment {
+public class GroupDetailFragment extends Fragment implements SecretEntryRelativeLayout.Callbacks {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -63,17 +65,29 @@ public class GroupDetailFragment extends Fragment {
         return rootView;
     }
 
-    private void createNoteSecret() {
-        Bundle arguments = new Bundle();
-        arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
-        arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
-        SecretEditorFragment fragment = new NoteSecretEditorFragment(new NoteSecretModel("", ""));
-        fragment.setArguments(arguments);
+    private void openSecretEditor(SecretModel secret) {
+        SecretEditorFragment fragment = null;
+        if (secret.getType() == SecretModel.GroupType.NOTE) {
+           fragment = new NoteSecretEditorFragment((NoteSecretModel) secret);
+        } else {
+            return;
+        }
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.editor_in, R.anim.editor_in)
                 .add(R.id.group_detail_container, fragment)
                 .commit();
     }
+
+    private void createNoteSecret() {
+        NoteSecretModel noteSecret = new NoteSecretModel();
+        mSecretGroup.addSecret(noteSecret);
+        openSecretEditor(noteSecret);
+    }
+
+    private void createPasswordSecret() {
+
+    }
+
 
     private void openInfoPanel() {
         Bundle arguments = new Bundle();
@@ -108,4 +122,8 @@ public class GroupDetailFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onEditSecretClicked(SecretModel secret) {
+        openSecretEditor(secret);
+    }
 }

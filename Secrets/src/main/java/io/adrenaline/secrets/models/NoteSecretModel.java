@@ -10,6 +10,10 @@ public class NoteSecretModel extends SecretModel {
     private static final String NOTE = "note";
     private String mNote = "";
 
+    public NoteSecretModel() {
+        super("");
+    }
+
     public NoteSecretModel(String name, String note) {
         super(name);
 

@@ -29,14 +29,8 @@ public class NoteSecretEditorFragment extends SecretEditorFragment {
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mNoteContent = (TextView) setEditorContent(R.layout.editor_note_content).findViewById(R.id.editor_note_content);
+        mNoteContent.setText(mNoteSecret.getNote());
 
         return root;
-    }
-
-    @Override
-    protected void update() {
-        super.update();
-
-        mNoteContent.setText(mNoteSecret.getNote());
     }
 }

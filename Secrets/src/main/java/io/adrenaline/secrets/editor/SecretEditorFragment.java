@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.Service;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,10 +46,11 @@ public abstract class SecretEditorFragment extends Fragment {
 
         mEditorContent = (ViewGroup) rootView.findViewById(R.id.editor_content);
         mTitleField = (TextView) rootView.findViewById(R.id.editor_title);
+        mTitleField.setText(mSecret.getName());
 
         mTitleField.requestFocus();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        
+
         return rootView;
     }
 
@@ -68,12 +70,6 @@ public abstract class SecretEditorFragment extends Fragment {
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mTitleField, 0);
-
-        update();
-    }
-
-    protected void update() {
-        mTitleField.setText(mSecret.getName());
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
