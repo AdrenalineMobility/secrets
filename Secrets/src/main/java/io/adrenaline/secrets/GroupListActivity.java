@@ -89,30 +89,25 @@ public class GroupListActivity extends FragmentActivity
 
     @Override
     public void onEntryInfoClicked(int index) {
+        Bundle arguments = new Bundle();
+        int container;
         if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
+            // In two-pane mode, show the info view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
-            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
-            GroupInfoFragment fragment = new GroupInfoFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.group_detail_container, fragment)
-                    .commit();
-
+            container = R.id.group_detail_container;
         } else {
-            // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
-            Bundle arguments = new Bundle();
-            arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_list_container);
-            arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
-            GroupInfoFragment fragment = new GroupInfoFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .add(R.id.group_list_container, fragment)
-                    .commit();
+            // In single-pane mode, put the info fragment
+            // for the selected item ID in the list container.
+            container = R.id.group_list_container;
         }
+        arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, container);
+        arguments.putInt(GroupDetailFragment.ARG_GROUP_INDEX, index);
+        GroupInfoFragment fragment = new GroupInfoFragment();
+        fragment.setArguments(arguments);
+        getFragmentManager().beginTransaction()
+                .replace(container, fragment)
+                .commit();
+
     }
 }

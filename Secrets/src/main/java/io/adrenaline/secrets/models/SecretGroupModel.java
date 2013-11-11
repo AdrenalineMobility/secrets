@@ -101,10 +101,15 @@ public class SecretGroupModel {
 
     public void setName(String name) {
         mName = name;
+        updated();
     }
 
     public SecretModel getSecret(int index) {
         return mSecrets.get(index);
+    }
+
+    public int indexOfSecret(SecretModel secret) {
+        return mSecrets.indexOf(secret);
     }
 
     public int getNumOfSecrets() {
@@ -113,14 +118,33 @@ public class SecretGroupModel {
 
     public void removeSecret(SecretModel secret) {
         mSecrets.remove(secret);
+        updated();
     }
 
     public void removeSecret(int index) {
         mSecrets.remove(index);
+        updated();
     }
 
+    public void updateSecret(SecretModel mSecret) {
+        updated();
+    }
+
+
     public boolean addSecret(SecretModel secret) {
-        return mSecrets.add(secret);
+        boolean result = mSecrets.add(secret);
+        if (result) {
+            updated();
+        }
+        return result;
+    }
+
+    protected void updated() {
+        mLastModified = new Date();
+        mModifier = "me";
+        if (mListener != null) {
+            mListener.onSecretGroupChanged();
+        }
     }
 
     public Date getModifiedTime() {
@@ -173,29 +197,40 @@ public class SecretGroupModel {
         }
 
         @Override
+        public int getItemViewType(int position) {
+            SecretModel.GroupType type = getItem(position).getType();
+            return type.ordinal();
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return SecretModel.GroupType.values().length;
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             SecretModel secret = getItem(position);
             if (secret.getType() == SecretModel.GroupType.NOTE) {
                 NoteSecretEntryRelativeLayout noteEntry;
-                if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
+                if (convertView != null && convertView instanceof NoteSecretEntryRelativeLayout) {
                     noteEntry = (NoteSecretEntryRelativeLayout) convertView;
                 } else {
                     LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
                     noteEntry = (NoteSecretEntryRelativeLayout) inflater.inflate(R.layout.note_secret_list_entry, parent, false);
                 }
 
-                noteEntry.update((NoteSecretModel) getItem(position));
+                noteEntry.update(secret);
                 return noteEntry;
             } else if (secret.getType() == SecretModel.GroupType.PASSWORD) {
                 PasswordSecretEntryRelativeLayout passwordEntry;
-                if (convertView != null && convertView instanceof GroupListEntryRelativeLayout) {
+                if (convertView != null && convertView instanceof PasswordSecretEntryRelativeLayout) {
                     passwordEntry = (PasswordSecretEntryRelativeLayout) convertView;
                 } else {
                     LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
                     passwordEntry = (PasswordSecretEntryRelativeLayout) inflater.inflate(R.layout.password_secret_list_entry, parent, false);
                 }
 
-                passwordEntry.update((PasswordSecretModel) getItem(position));
+                passwordEntry.update(secret);
                 return passwordEntry;
             } else {
                 return null;
