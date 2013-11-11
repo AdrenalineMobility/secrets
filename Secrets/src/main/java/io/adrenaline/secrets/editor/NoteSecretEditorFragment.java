@@ -39,8 +39,8 @@ public class NoteSecretEditorFragment extends SecretEditorFragment {
 
     @Override
     protected void save() {
-        super.save();
-
         mNoteSecret.setNote(mNoteContent.getText().toString());
+        super.save();
     }
+
 }

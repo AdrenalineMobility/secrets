@@ -126,6 +126,11 @@ public class SecretGroupModel {
         updated();
     }
 
+    public void updateSecret(SecretModel mSecret) {
+        updated();
+    }
+
+
     public boolean addSecret(SecretModel secret) {
         boolean result = mSecrets.add(secret);
         if (result) {

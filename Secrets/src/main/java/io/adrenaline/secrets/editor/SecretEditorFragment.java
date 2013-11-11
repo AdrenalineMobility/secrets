@@ -43,6 +43,7 @@ public abstract class SecretEditorFragment extends Fragment {
         return null;
     }
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -84,12 +85,25 @@ public abstract class SecretEditorFragment extends Fragment {
 
     protected void save() {
         mSecret.setName(mTitleField.getText().toString());
+        SecretGroupModel group = Secrets.getSecretGroup(getArguments().getInt(GroupDetailFragment.ARG_GROUP_INDEX));
+        group.updateSecret(mSecret);
+    }
+
+    protected void discard() {
+        SecretGroupModel group = Secrets.getSecretGroup(getArguments().getInt(GroupDetailFragment.ARG_GROUP_INDEX));
+        group.removeSecret(mSecret);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_discard_secret:
+                discard();
+                getActivity().finish();
+                return true;
+            case R.id.action_save_secret:
+                save();
+                getActivity().finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
