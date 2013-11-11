@@ -108,6 +108,10 @@ public class SecretGroupModel {
         return mSecrets.get(index);
     }
 
+    public int indexOfSecret(SecretModel secret) {
+        return mSecrets.indexOf(secret);
+    }
+
     public int getNumOfSecrets() {
         return mSecrets.size();
     }

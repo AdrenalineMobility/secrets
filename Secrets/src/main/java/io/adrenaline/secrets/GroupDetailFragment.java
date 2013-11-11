@@ -1,6 +1,7 @@
 package io.adrenaline.secrets;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import io.adrenaline.secrets.editor.NoteSecretEditorFragment;
+import io.adrenaline.secrets.editor.SecretEditorActivity;
 import io.adrenaline.secrets.editor.SecretEditorFragment;
 import io.adrenaline.secrets.models.NoteSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
@@ -66,16 +67,10 @@ public class GroupDetailFragment extends Fragment implements SecretEntryRelative
     }
 
     private void openSecretEditor(SecretModel secret) {
-        SecretEditorFragment fragment = null;
-        if (secret.getType() == SecretModel.GroupType.NOTE) {
-           fragment = new NoteSecretEditorFragment((NoteSecretModel) secret);
-        } else {
-            return;
-        }
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.editor_in, R.anim.editor_in)
-                .add(R.id.group_detail_container, fragment)
-                .commit();
+        Intent detailIntent = new Intent(this.getActivity(), SecretEditorActivity.class);
+        detailIntent.putExtra(GroupDetailFragment.ARG_GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
+        detailIntent.putExtra(SecretEditorFragment.ARG_SECRET_INDEX, mSecretGroup.indexOfSecret(secret));
+        startActivity(detailIntent);
     }
 
     private void createNoteSecret() {

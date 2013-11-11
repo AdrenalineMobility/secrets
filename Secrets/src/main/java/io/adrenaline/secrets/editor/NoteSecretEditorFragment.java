@@ -8,19 +8,22 @@ import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.models.NoteSecretModel;
-import io.adrenaline.secrets.models.SecretModel;
 
 /**
  * Created by stang6 on 11/8/13.
  */
 public class NoteSecretEditorFragment extends SecretEditorFragment {
-    private final NoteSecretModel mNoteSecret;
+    private NoteSecretModel mNoteSecret;
     private TextView mNoteContent;
 
-    public NoteSecretEditorFragment(NoteSecretModel secret) {
-        super(secret);
+    public NoteSecretEditorFragment() {
+    }
 
-        mNoteSecret = secret;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mNoteSecret = (NoteSecretModel) getSecret();
     }
 
     @Override
@@ -32,5 +35,12 @@ public class NoteSecretEditorFragment extends SecretEditorFragment {
         mNoteContent.setText(mNoteSecret.getNote());
 
         return root;
+    }
+
+    @Override
+    protected void save() {
+        super.save();
+
+        mNoteSecret.setNote(mNoteContent.getText().toString());
     }
 }

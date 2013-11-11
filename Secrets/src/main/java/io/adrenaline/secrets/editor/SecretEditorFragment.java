@@ -1,11 +1,8 @@
 package io.adrenaline.secrets.editor;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.Service;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,25 +13,44 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import io.adrenaline.secrets.GroupDetailFragment;
 import io.adrenaline.secrets.R;
+import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.SecretModel;
+import io.adrenaline.secrets.models.Secrets;
 
 /**
  * Created by stang6 on 11/7/13.
  */
 public abstract class SecretEditorFragment extends Fragment {
 
-    private final SecretModel mSecret;
-    private ActionMode mActionMode;
+    public static final String ARG_SECRET_INDEX = "secret_index";
+
+    private SecretModel mSecret;
     private TextView mTitleField;
     private ViewGroup mEditorContent;
 
-    public SecretEditorFragment(SecretModel secret) {
-        mSecret = secret;
+    public SecretEditorFragment() {
+    }
+
+    protected final SecretModel getSecret() {
+        if (getArguments().containsKey(GroupDetailFragment.ARG_GROUP_INDEX)
+                && getArguments().containsKey(ARG_SECRET_INDEX)) {
+            // Load the group content specified by the fragment
+            SecretGroupModel group = Secrets.getSecretGroup(getArguments().getInt(GroupDetailFragment.ARG_GROUP_INDEX));
+            return group.getSecret(getArguments().getInt(ARG_SECRET_INDEX));
+        }
+        return null;
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SecretModel secret = getSecret();
+        if (secret == null) {
+            throw new IllegalStateException("Cannot open editor without content");
+        }
+        mSecret = secret;
 
         setHasOptionsMenu(true);
     }
@@ -62,58 +78,26 @@ public abstract class SecretEditorFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (mActionMode != null) {
-            return;
-        }
-        // Start the CAB using the ActionMode.Callback defined below
-        mActionMode = getActivity().startActionMode(mActionModeCallback);
-
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mTitleField, 0);
     }
 
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    protected void save() {
+        mSecret.setName(mTitleField.getText().toString());
+    }
 
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.secret_editor, menu);
-            return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_discard_secret:
+                return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
 
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_discard_secret:
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-
-            getActivity().getFragmentManager()
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                    .remove(SecretEditorFragment.this).commit();
-        }
-    };
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.secret_editor, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }
