@@ -1,9 +1,11 @@
 package io.adrenaline.secrets.editor;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import io.adrenaline.secrets.R;
@@ -42,6 +44,19 @@ public class PasswordSecretEditorFragment extends SecretEditorFragment {
         mUsername.setText(mPasswordSecret.getUsername());
         mPassword = (TextView) root.findViewById(R.id.editor_password_password);
         mPassword.setText(mPasswordSecret.getPassword());
+
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    save();
+                    getActivity().finish();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         return root;
     }
