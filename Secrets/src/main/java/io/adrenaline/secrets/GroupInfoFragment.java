@@ -1,8 +1,9 @@
 package io.adrenaline.secrets;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,12 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
+import io.adrenaline.secrets.views.ACLEntryRelativeLayout;
 
 public class GroupInfoFragment extends Fragment {
     public static final String ARG_CONTAINER_ID = "container_id";
@@ -33,6 +36,7 @@ public class GroupInfoFragment extends Fragment {
     private TextView mLastModified;
     private TextView mLastModifiedByMe;
     private TextView mLastOpenedByMe;
+    private View mAddPeople;
 
     private ActionMode mActionMode;
     private SecretGroupModel mSecretGroup;
@@ -58,12 +62,20 @@ public class GroupInfoFragment extends Fragment {
         /* find views */
         mGroupTitle = (TextView) rootView.findViewById(R.id.title);
         mOfflineSwitch = rootView.findViewById(R.id.pin_compoundButton);
+        mOfflineSwitch.setEnabled(false);
         mShareList = (LinearLayout) rootView.findViewById(R.id.share_list);
         mShareListWarning = (TextView) rootView.findViewById(R.id.share_list_warning);
         mShareListProgress = (ProgressBar) rootView.findViewById(R.id.share_list_progress_bar);
         mLastModified = (TextView) rootView.findViewById(R.id.last_modified);
         mLastModifiedByMe = (TextView) rootView.findViewById(R.id.last_modified_by_me);
         mLastOpenedByMe = (TextView) rootView.findViewById(R.id.last_opened_by_me);
+        mAddPeople = inflater.inflate(R.layout.fragment_group_info_sharing_add_entry, mShareList, false);
+        mAddPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPeople();
+            }
+        });
 
         return rootView;
     }
@@ -78,7 +90,32 @@ public class GroupInfoFragment extends Fragment {
         // Start the CAB using the ActionMode.Callback defined below
         mActionMode = getActivity().startActionMode(mActionModeCallback);
         mGroupTitle.setText(mSecretGroup.getName());
+        updateACL();
         updateGeneralInfoPanel();
+    }
+
+    private void updateACL() {
+        new AsyncTask<Void, Void, List<String>>() {
+            @Override
+            protected List<String> doInBackground(Void... params) {
+                return mSecretGroup.getACL();
+            }
+
+            @Override
+            protected void onPostExecute(List<String> acl) {
+                mShareListProgress.setVisibility(View.GONE);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                boolean owner = true;
+                for (String id : acl) {
+                    ACLEntryRelativeLayout aclEntry = (ACLEntryRelativeLayout) inflater.inflate(R.layout.fragment_group_info_sharing_entry, mShareList, false);
+                    aclEntry.update(id, owner);
+                    owner = false;
+                    mShareList.addView(aclEntry);
+                }
+                mShareList.addView(mAddPeople);
+                super.onPostExecute(acl);
+            }
+        }.execute();
     }
 
     private void updateGeneralInfoPanel() {
@@ -89,6 +126,10 @@ public class GroupInfoFragment extends Fragment {
         mLastModified.setText(String.format(mLastModifiedFormat, modifiedTime, modifier));
         mLastModifiedByMe.setText(String.format(mLastModifiedByMeFormat, modifiedByMeTime));
         mLastOpenedByMe.setText(String.format(mLastOpenedByMeFormat, openedByMeTime));
+    }
+
+    private void addPeople() {
+
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -113,6 +154,9 @@ public class GroupInfoFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.action_add_people:
+                    addPeople();
+                    return true;
                 case R.id.action_group_rename:
                     mode.finish(); // Action picked, so close the CAB
                     return true;

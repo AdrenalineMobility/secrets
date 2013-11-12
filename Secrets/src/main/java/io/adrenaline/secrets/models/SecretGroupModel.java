@@ -58,6 +58,11 @@ public class SecretGroupModel {
             }
         }
 
+        int num = Math.abs(new Random().nextInt() % 5) + 1;
+        for (int i = 0; i < num; ++i) {
+            model.mAcl.add("user " + i);
+        }
+
         return model;
     }
 
@@ -91,8 +96,12 @@ public class SecretGroupModel {
         return mId;
     }
 
-    public List getACL() {
-        return new ArrayList();
+
+    // for test only
+    private ArrayList<String> mAcl = new ArrayList<>();
+
+    public List<String> getACL() {
+        return mAcl;
     }
 
     public String getName() {
