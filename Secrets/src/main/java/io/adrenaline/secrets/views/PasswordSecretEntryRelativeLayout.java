@@ -15,6 +15,7 @@ import io.adrenaline.secrets.models.SecretModel;
 public class PasswordSecretEntryRelativeLayout extends SecretEntryRelativeLayout {
 
     private PasswordSecretModel mPassword;
+    private TextView mWebsiteField;
     private TextView mPasswordField;
     private TextView mUsernameField;
 
@@ -35,6 +36,7 @@ public class PasswordSecretEntryRelativeLayout extends SecretEntryRelativeLayout
         super.onFinishInflate();
 
         View container = addDetailView(R.layout.password_secret_detail);
+        mWebsiteField = (TextView) container.findViewById(R.id.website_field);
         mPasswordField = (TextView) container.findViewById(R.id.password_field);
         mUsernameField = (TextView) container.findViewById(R.id.username_field);
     }
@@ -44,6 +46,7 @@ public class PasswordSecretEntryRelativeLayout extends SecretEntryRelativeLayout
         super.update(password);
         mPassword = (PasswordSecretModel) password;
 
+        mWebsiteField.setText(mPassword.getWebSite());
         mUsernameField.setText(mPassword.getUsername());
         mPasswordField.setText(mPassword.getPassword());
     }

@@ -42,7 +42,7 @@ public class PasswordSecretModel extends SecretModel {
 
     @Override
     public String getLabels() {
-        return getUsername() + "@" + getWebSite();
+        return getUsername() + " - " + getWebSite();
     }
 
     @Override
