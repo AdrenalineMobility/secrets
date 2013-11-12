@@ -14,6 +14,7 @@ import android.widget.ListView;
 import io.adrenaline.secrets.editor.SecretEditorActivity;
 import io.adrenaline.secrets.editor.SecretEditorFragment;
 import io.adrenaline.secrets.models.NoteSecretModel;
+import io.adrenaline.secrets.models.PasswordSecretModel;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.SecretModel;
 import io.adrenaline.secrets.models.Secrets;
@@ -80,7 +81,9 @@ public class GroupDetailFragment extends Fragment implements SecretEntryRelative
     }
 
     private void createPasswordSecret() {
-
+        PasswordSecretModel passwordSecret = new PasswordSecretModel();
+        mSecretGroup.addSecret(passwordSecret);
+        openSecretEditor(passwordSecret);
     }
 
 
@@ -103,6 +106,7 @@ public class GroupDetailFragment extends Fragment implements SecretEntryRelative
                 createNoteSecret();
                 return true;
             case R.id.action_add_password_secret:
+                createPasswordSecret();
                 return true;
             case R.id.action_general_info:
                 openInfoPanel();

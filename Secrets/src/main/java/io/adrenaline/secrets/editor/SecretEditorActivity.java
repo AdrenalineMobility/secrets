@@ -55,6 +55,8 @@ public class SecretEditorActivity extends Activity {
             SecretEditorFragment fragment;
             if (type == SecretModel.GroupType.NOTE) {
                 fragment = new NoteSecretEditorFragment();
+            } else if (type == SecretModel.GroupType.PASSWORD) {
+                fragment = new PasswordSecretEditorFragment();
             } else {
                 return;
             }
