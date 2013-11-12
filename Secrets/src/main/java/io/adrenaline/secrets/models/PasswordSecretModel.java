@@ -31,6 +31,10 @@ public class PasswordSecretModel extends SecretModel {
         }
     }
 
+    public PasswordSecretModel() {
+        super("");
+    }
+
     @Override
     protected JSONObject getContentObject() throws JSONException {
         return new JSONObject().put(WEBSITE, mWebsite).put(USERNAME, mUsername).put(mPassword, mPassword);
