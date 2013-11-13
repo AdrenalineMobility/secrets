@@ -118,7 +118,7 @@ public class SignUpFragment extends Fragment {
         final ProgressDialogFragment dialog = ProgressDialogFragment.showDialog(getActivity());
         dialog.setText("Signing up " + username + "...");
 
-        AdrenalineAsync.signUpAsync(getActivity(), username, password, new AdrenalineAsync.ApiDeferred() {
+        AdrenalineAsync.signUpAsync(username, password, new AdrenalineAsync.ApiDeferred() {
             @Override
             public void done(ApiResponse response) {
                 Log.d(TAG, "Signed up!");

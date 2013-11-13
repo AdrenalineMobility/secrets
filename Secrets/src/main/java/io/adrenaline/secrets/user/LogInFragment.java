@@ -109,7 +109,7 @@ public class LogInFragment extends Fragment {
         mUsername.setError(null);
         mPassword.setError(null);
 
-        AdrenalineAsync.logInAsync(getActivity(), username, password, new AdrenalineAsync.ApiDeferred() {
+        AdrenalineAsync.logInAsync(username, password, new AdrenalineAsync.ApiDeferred() {
             @Override
             public void done(ApiResponse response) {
                 Log.d(TAG, "Logged In!");

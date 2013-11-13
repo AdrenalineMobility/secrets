@@ -36,7 +36,7 @@ public class Splash extends Activity {
         final Button button = (Button) findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Splash.this, GroupListActivity.class);
+                Intent intent = new Intent(Splash.this, LogInSignUpActivity.class);
                 intent.putExtra(START_AS_LOGIN, true);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
