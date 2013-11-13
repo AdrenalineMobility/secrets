@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import io.adrenaline.secrets.dialogs.ShareDialogFragment;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
 import io.adrenaline.secrets.views.ACLEntryRelativeLayout;
@@ -129,7 +130,7 @@ public class GroupInfoFragment extends Fragment {
     }
 
     private void addPeople() {
-
+        new ShareDialogFragment().show(getFragmentManager(), ShareDialogFragment.TAG);
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
