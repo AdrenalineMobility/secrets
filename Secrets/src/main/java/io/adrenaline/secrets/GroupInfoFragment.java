@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import io.adrenaline.secrets.dialogs.ShareDialogFragment;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
 import io.adrenaline.secrets.views.ACLEntryRelativeLayout;
@@ -106,9 +107,22 @@ public class GroupInfoFragment extends Fragment {
                 mShareListProgress.setVisibility(View.GONE);
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 boolean owner = true;
-                for (String id : acl) {
+                for (final String id : acl) {
                     ACLEntryRelativeLayout aclEntry = (ACLEntryRelativeLayout) inflater.inflate(R.layout.fragment_group_info_sharing_entry, mShareList, false);
                     aclEntry.update(id, owner);
+                    if (!owner) {
+                        aclEntry.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Bundle args = new Bundle();
+                                args.putString(ShareDialogFragment.USER_ID, id);
+                                args.putInt(ShareDialogFragment.ACCESS, 0);
+                                ShareDialogFragment fragment = new ShareDialogFragment();
+                                fragment.setArguments(args);
+                                fragment.show(getFragmentManager(), ShareDialogFragment.TAG);
+                            }
+                        });
+                    }
                     owner = false;
                     mShareList.addView(aclEntry);
                 }
@@ -129,7 +143,7 @@ public class GroupInfoFragment extends Fragment {
     }
 
     private void addPeople() {
-
+        new ShareDialogFragment().show(getFragmentManager(), ShareDialogFragment.TAG);
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -159,6 +173,8 @@ public class GroupInfoFragment extends Fragment {
                     return true;
                 case R.id.action_group_rename:
                     mode.finish(); // Action picked, so close the CAB
+                    return true;
+                case R.id.action_group_remove:
                     return true;
                 default:
                     return false;
