@@ -23,8 +23,9 @@ import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
 import io.adrenaline.secrets.views.ACLEntryRelativeLayout;
 
-public class GroupInfoFragment extends Fragment {
+public class GroupInfoFragment extends Fragment implements NamingGroupDialogFragment.Callback {
     public static final String ARG_CONTAINER_ID = "container_id";
+    public static final String TAG = "GROUP_INFO";
 
     private String mLastModifiedFormat;
     private String mLastModifiedByMeFormat;
@@ -108,6 +109,7 @@ public class GroupInfoFragment extends Fragment {
                 mShareListProgress.setVisibility(View.GONE);
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 boolean owner = true;
+                mShareList.removeAllViews();
                 for (final String id : acl) {
                     ACLEntryRelativeLayout aclEntry = (ACLEntryRelativeLayout) inflater.inflate(R.layout.fragment_group_info_sharing_entry, mShareList, false);
                     aclEntry.update(id, owner);
@@ -194,4 +196,9 @@ public class GroupInfoFragment extends Fragment {
             getActivity().getFragmentManager().beginTransaction().remove(GroupInfoFragment.this).commit();
         }
     };
+
+    @Override
+    public void onNameChanged() {
+        mGroupTitle.setText(mSecretGroup.getName());
+    }
 }

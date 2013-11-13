@@ -106,7 +106,7 @@ public class GroupListActivity extends FragmentActivity
         GroupInfoFragment fragment = new GroupInfoFragment();
         fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
-                .replace(container, fragment)
+                .replace(container, fragment, GroupInfoFragment.TAG)
                 .commit();
 
     }

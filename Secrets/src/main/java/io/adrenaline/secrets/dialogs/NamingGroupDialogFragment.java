@@ -3,6 +3,7 @@ package io.adrenaline.secrets.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import io.adrenaline.secrets.GroupDetailFragment;
+import io.adrenaline.secrets.GroupInfoFragment;
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
@@ -22,6 +25,10 @@ public class NamingGroupDialogFragment extends DialogFragment {
     public static final String GROUP_INDEX = "group_index";
 
     private int mIndex = -1;
+
+    public interface Callback {
+        public void onNameChanged();
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,6 +58,11 @@ public class NamingGroupDialogFragment extends DialogFragment {
                     SecretGroupModel group = Secrets.getSecretGroup(mIndex);
                     group.setName(groupName.getText().toString());
                     Secrets.updateSecretGroup(group);
+
+                    Fragment f = getFragmentManager().findFragmentByTag(GroupInfoFragment.TAG);
+                    if (f instanceof Callback) {
+                        ((Callback) f).onNameChanged();
+                    }
                 }
             }
         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
