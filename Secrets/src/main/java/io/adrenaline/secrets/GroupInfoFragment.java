@@ -174,6 +174,8 @@ public class GroupInfoFragment extends Fragment {
                 case R.id.action_group_rename:
                     mode.finish(); // Action picked, so close the CAB
                     return true;
+                case R.id.action_group_remove:
+                    return true;
                 default:
                     return false;
             }
