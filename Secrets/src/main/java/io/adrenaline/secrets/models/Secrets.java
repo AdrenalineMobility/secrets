@@ -41,27 +41,32 @@ public class Secrets {
 
     public static void setSecretGroups(Collection<SecretGroupModel> collection) {
         sSecrets = new ArrayList<SecretGroupModel>(collection);
-        if (sListener != null) {
-            sListener.onSecretsChanged();
-        }
+        updated();
     }
 
     public static void addSecretGroup(SecretGroupModel group) {
         sSecrets.add(group);
-        if (sListener != null) {
-            sListener.onSecretsChanged();
-        }
+        updated();
     }
 
     public static void updateSecretGroup(SecretGroupModel group) {
-        if (indexOfSecretGroup(group) < 0) {
-            return;
+        if (indexOfSecretGroup(group) >= 0) {
+            updated();
         }
+    }
 
+    public static void removeSecretGroup(SecretGroupModel group) {
+        if (sSecrets.remove(group)) {
+            updated();
+        }
+    }
+
+    private static void updated() {
         if (sListener != null) {
             sListener.onSecretsChanged();
         }
     }
+
 
     public static SecretGroupModel getSecretGroup(int index) {
         if (index < sSecrets.size()) {

@@ -2,8 +2,10 @@ package io.adrenaline.secrets;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -184,6 +186,12 @@ public class GroupInfoFragment extends Fragment implements NamingGroupDialogFrag
                     fragment.show(getFragmentManager(), NamingGroupDialogFragment.TAG);
                     return true;
                 case R.id.action_group_remove:
+                    Secrets.removeSecretGroup(mSecretGroup);
+                    if (getActivity() instanceof GroupListActivity) {
+                        mode.finish();
+                    } else {
+                        NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), GroupListActivity.class));
+                    }
                     return true;
                 default:
                     return false;
