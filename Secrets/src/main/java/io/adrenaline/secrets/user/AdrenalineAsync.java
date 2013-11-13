@@ -1,4 +1,4 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 
 import android.app.Activity;

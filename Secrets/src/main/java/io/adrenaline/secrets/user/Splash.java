@@ -1,4 +1,4 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import io.adrenaline.User;
+import io.adrenaline.secrets.GroupListActivity;
+import io.adrenaline.secrets.R;
 
 public class Splash extends Activity {
     private static final String TAG = "AdrenalineSecrets";

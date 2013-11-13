@@ -1,4 +1,4 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,12 +6,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import io.adrenaline.AdrenalineIo;
-import io.adrenaline.ApiResponse;
+import io.adrenaline.secrets.R;
 
 public class LogInSignUpActivity extends ActionBarActivity
         implements LogInFragment.OnLogInListener,

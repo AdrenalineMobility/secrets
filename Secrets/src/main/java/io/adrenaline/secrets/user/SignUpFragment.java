@@ -1,4 +1,4 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import io.adrenaline.AdrenalineIo;
 import io.adrenaline.ApiResponse;
+import io.adrenaline.secrets.R;
 
 public class SignUpFragment extends Fragment {
     private static final String TAG = "SignUpFragment";
@@ -126,6 +126,7 @@ public class SignUpFragment extends Fragment {
                 if (getActivity() != null)
                     getActivity().finish();
             }
+
             @Override
             public void fail(ApiResponse response) {
                 String err = "Could not sign up " + response.status();
