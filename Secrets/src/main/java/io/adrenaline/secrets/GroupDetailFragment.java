@@ -86,7 +86,6 @@ public class GroupDetailFragment extends Fragment implements SecretEntryRelative
         openSecretEditor(passwordSecret);
     }
 
-
     private void openInfoPanel() {
         Bundle arguments = new Bundle();
         arguments.putInt(GroupInfoFragment.ARG_CONTAINER_ID, R.id.group_detail_container);
@@ -95,7 +94,7 @@ public class GroupDetailFragment extends Fragment implements SecretEntryRelative
         fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.card_flip_left_in, R.anim.card_flip_left_out)
-                .add(R.id.group_detail_container, fragment)
+                .add(R.id.group_detail_container, fragment, GroupInfoFragment.TAG)
                 .commit();
     }
 

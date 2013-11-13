@@ -46,7 +46,7 @@ public class GroupListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((GroupListFragment) getSupportFragmentManager()
+            ((GroupListFragment) getFragmentManager()
                     .findFragmentById(R.id.group_list))
                     .setActivateOnItemClick(true);
         }
@@ -106,7 +106,7 @@ public class GroupListActivity extends FragmentActivity
         GroupInfoFragment fragment = new GroupInfoFragment();
         fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
-                .replace(container, fragment)
+                .replace(container, fragment, GroupInfoFragment.TAG)
                 .commit();
 
     }

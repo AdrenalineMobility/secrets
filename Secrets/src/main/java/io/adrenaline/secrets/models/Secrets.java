@@ -53,6 +53,16 @@ public class Secrets {
         }
     }
 
+    public static void updateSecretGroup(SecretGroupModel group) {
+        if (indexOfSecretGroup(group) < 0) {
+            return;
+        }
+
+        if (sListener != null) {
+            sListener.onSecretsChanged();
+        }
+    }
+
     public static SecretGroupModel getSecretGroup(int index) {
         if (index < sSecrets.size()) {
             return sSecrets.get(index);
