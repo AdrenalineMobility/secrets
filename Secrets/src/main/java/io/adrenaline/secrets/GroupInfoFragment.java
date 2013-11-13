@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import io.adrenaline.secrets.dialogs.NamingGroupDialogFragment;
 import io.adrenaline.secrets.dialogs.ShareDialogFragment;
 import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
@@ -172,7 +173,11 @@ public class GroupInfoFragment extends Fragment {
                     addPeople();
                     return true;
                 case R.id.action_group_rename:
-                    mode.finish(); // Action picked, so close the CAB
+                    Bundle args = new Bundle();
+                    args.putInt(NamingGroupDialogFragment.GROUP_INDEX, Secrets.indexOfSecretGroup(mSecretGroup));
+                    NamingGroupDialogFragment fragment = new NamingGroupDialogFragment();
+                    fragment.setArguments(args);
+                    fragment.show(getFragmentManager(), NamingGroupDialogFragment.TAG);
                     return true;
                 case R.id.action_group_remove:
                     return true;

@@ -2,7 +2,7 @@ package io.adrenaline.secrets;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import io.adrenaline.secrets.dialogs.CreateGroupDialogFragment;
+import io.adrenaline.secrets.dialogs.NamingGroupDialogFragment;
 import io.adrenaline.secrets.models.Secrets;
 
 /**
@@ -157,7 +157,7 @@ public class GroupListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_group:
-                new CreateGroupDialogFragment().show(getFragmentManager(), CreateGroupDialogFragment.TAG);
+                new NamingGroupDialogFragment().show(getFragmentManager(), NamingGroupDialogFragment.TAG);
                 return true;
         }
         return super.onOptionsItemSelected(item);
