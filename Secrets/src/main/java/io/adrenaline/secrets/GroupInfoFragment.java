@@ -107,9 +107,22 @@ public class GroupInfoFragment extends Fragment {
                 mShareListProgress.setVisibility(View.GONE);
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 boolean owner = true;
-                for (String id : acl) {
+                for (final String id : acl) {
                     ACLEntryRelativeLayout aclEntry = (ACLEntryRelativeLayout) inflater.inflate(R.layout.fragment_group_info_sharing_entry, mShareList, false);
                     aclEntry.update(id, owner);
+                    if (!owner) {
+                        aclEntry.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Bundle args = new Bundle();
+                                args.putString(ShareDialogFragment.USER_ID, id);
+                                args.putInt(ShareDialogFragment.ACCESS, 0);
+                                ShareDialogFragment fragment = new ShareDialogFragment();
+                                fragment.setArguments(args);
+                                fragment.show(getFragmentManager(), ShareDialogFragment.TAG);
+                            }
+                        });
+                    }
                     owner = false;
                     mShareList.addView(aclEntry);
                 }
