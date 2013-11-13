@@ -23,7 +23,7 @@ import io.adrenaline.secrets.models.SecretGroupModel;
 import io.adrenaline.secrets.models.Secrets;
 import io.adrenaline.secrets.views.ACLEntryRelativeLayout;
 
-public class GroupInfoFragment extends Fragment implements NamingGroupDialogFragment.Callback {
+public class GroupInfoFragment extends Fragment implements NamingGroupDialogFragment.Callback, ShareDialogFragment.Callback {
     public static final String ARG_CONTAINER_ID = "container_id";
     public static final String TAG = "GROUP_INFO";
 
@@ -98,6 +98,8 @@ public class GroupInfoFragment extends Fragment implements NamingGroupDialogFrag
     }
 
     private void updateACL() {
+        mShareList.removeAllViews();
+        mShareListProgress.setVisibility(View.VISIBLE);
         new AsyncTask<Void, Void, List<String>>() {
             @Override
             protected List<String> doInBackground(Void... params) {
@@ -200,5 +202,10 @@ public class GroupInfoFragment extends Fragment implements NamingGroupDialogFrag
     @Override
     public void onNameChanged() {
         mGroupTitle.setText(mSecretGroup.getName());
+    }
+
+    @Override
+    public void onSharingListChanged() {
+        updateACL();
     }
 }

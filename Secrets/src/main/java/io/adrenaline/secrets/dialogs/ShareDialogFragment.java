@@ -2,6 +2,7 @@ package io.adrenaline.secrets.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.DialogFragment;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import io.adrenaline.secrets.GroupInfoFragment;
 import io.adrenaline.secrets.R;
 
 /**
@@ -25,6 +27,10 @@ public class ShareDialogFragment extends DialogFragment {
 
     private TextView mAddPersonField;
     private ListView mShareOption;
+
+    public interface Callback {
+        public void onSharingListChanged();
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -60,7 +66,11 @@ public class ShareDialogFragment extends DialogFragment {
         builder.setView(v);
         builder.setPositiveButton(okId, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-
+                // FIXME change the acl
+                Fragment f = getFragmentManager().findFragmentByTag(GroupInfoFragment.TAG);
+                if (f instanceof Callback) {
+                    ((Callback) f).onSharingListChanged();
+                }
             }
         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
