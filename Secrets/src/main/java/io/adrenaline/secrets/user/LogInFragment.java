@@ -1,4 +1,4 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import io.adrenaline.AdrenalineIo;
 import io.adrenaline.ApiResponse;
+import io.adrenaline.secrets.R;
 
 public class LogInFragment extends Fragment {
     private static final String TAG = "LogInFragment";
@@ -109,7 +109,7 @@ public class LogInFragment extends Fragment {
         mUsername.setError(null);
         mPassword.setError(null);
 
-        AdrenalineAsync.logInAsync(getActivity(), username, password, new AdrenalineAsync.ApiDeferred() {
+        AdrenalineAsync.logInAsync(username, password, new AdrenalineAsync.ApiDeferred() {
             @Override
             public void done(ApiResponse response) {
                 Log.d(TAG, "Logged In!");
@@ -117,6 +117,7 @@ public class LogInFragment extends Fragment {
                 if (getActivity() != null)
                     getActivity().finish();
             }
+
             @Override
             public void fail(ApiResponse response) {
                 dialog.dismiss();

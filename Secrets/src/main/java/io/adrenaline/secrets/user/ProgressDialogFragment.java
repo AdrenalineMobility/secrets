@@ -1,8 +1,7 @@
-package io.adrenaline.secrets;
+package io.adrenaline.secrets.user;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import io.adrenaline.secrets.R;
 
 
 public class ProgressDialogFragment extends DialogFragment {
