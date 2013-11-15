@@ -48,6 +48,8 @@ public class Secrets {
     }
 
     public static void sync() {
+        sSecrets.clear();
+
         SyncList groupList = new SyncList(SECRET_GROUPS);
         groupList.get(new SyncList.SyncListCallback() {
             @Override
@@ -89,7 +91,7 @@ public class Secrets {
     public static void addSecretGroup(final SecretGroupModel group) throws JSONException {
         final String groupId = UUID.randomUUID().toString();
         SyncList syncGroup = new SyncList(groupId);
-        syncGroup.add(group.toJSONObject().toString(), new SyncList.SyncListCallback() {
+        syncGroup.add(group.getMetadata(), new SyncList.SyncListCallback() {
             @Override
             public void done(List<String> list) {
                 addToGroupList(groupId, group);

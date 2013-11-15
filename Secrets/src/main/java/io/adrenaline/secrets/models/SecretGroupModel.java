@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import io.adrenaline.User;
 import io.adrenaline.secrets.R;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 import io.adrenaline.secrets.views.NoteSecretEntryRelativeLayout;
@@ -80,10 +81,7 @@ public class SecretGroupModel {
 
     public SecretGroupModel(List<String> list) throws JSONException {
         String metaString = list.remove(0);
-        JSONObject meta = new JSONObject(metaString);
-        mName = meta.getString(NAME);
-        mLastModified = new Date(meta.optLong(LAST_MODIFIED_TIME, new Date().getTime()));
-        mModifier = meta.optString(LAST_MODIFIER, mModifier);
+        setMetadata(metaString);
 
         for (String secret : list) {
             mSecrets.add(SecretModel.create(new JSONObject(secret)));
@@ -176,6 +174,21 @@ public class SecretGroupModel {
 
     public String getModifier() {
         return mModifier;
+    }
+
+    public String getMetadata() throws JSONException {
+        JSONObject meta = new JSONObject();
+        meta.put(NAME, mName);
+        meta.put(LAST_MODIFIED_TIME, mLastModified.getTime());
+        meta.put(LAST_MODIFIER, mModifier);
+        return meta.toString();
+    }
+
+    private void setMetadata(String metadata) throws JSONException {
+        JSONObject meta = new JSONObject(metadata);
+        mName = meta.getString(NAME);
+        mLastModified = new Date(meta.optLong(LAST_MODIFIED_TIME, new Date().getTime()));
+        mModifier = meta.optString(LAST_MODIFIER, mModifier);
     }
 
     public JSONObject toJSONObject() throws JSONException {
