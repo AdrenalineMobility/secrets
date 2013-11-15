@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import io.adrenaline.secrets.GroupDetailFragment;
 import io.adrenaline.secrets.GroupInfoFragment;
 import io.adrenaline.secrets.R;
@@ -53,7 +55,11 @@ public class NamingGroupDialogFragment extends DialogFragment {
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (mIndex < 0) {
-                    Secrets.addSecretGroup(new SecretGroupModel(groupName.getText().toString()));
+                    try {
+                        Secrets.addSecretGroup(new SecretGroupModel(groupName.getText().toString()));
+                    } catch (JSONException e) {
+                        // TODO
+                    }
                 } else {
                     SecretGroupModel group = Secrets.getSecretGroup(mIndex);
                     group.setName(groupName.getText().toString());

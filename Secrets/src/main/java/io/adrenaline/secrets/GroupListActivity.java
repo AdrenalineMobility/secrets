@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import io.adrenaline.secrets.models.Secrets;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 
 
@@ -52,6 +53,7 @@ public class GroupListActivity extends FragmentActivity
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
+        Secrets.sync();
     }
 
     /**

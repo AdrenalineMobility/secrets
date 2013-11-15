@@ -78,6 +78,20 @@ public class SecretGroupModel {
         mModifier = "me";
     }
 
+    public SecretGroupModel(List<String> list) throws JSONException {
+        String metaString = list.remove(0);
+        JSONObject meta = new JSONObject(metaString);
+        mName = meta.getString(NAME);
+        mLastModified = new Date(meta.optLong(LAST_MODIFIED_TIME, new Date().getTime()));
+        mModifier = meta.optString(LAST_MODIFIER, mModifier);
+
+        for (String secret : list) {
+            mSecrets.add(SecretModel.create(new JSONObject(secret)));
+        }
+
+        updated();
+    }
+
     public SecretGroupModel(JSONObject object) throws JSONException {
         mName = object.getString(NAME);
         JSONArray secrets = object.getJSONArray(SECRETS);

@@ -1,21 +1,29 @@
 package io.adrenaline.secrets.models;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 import io.adrenaline.secrets.R;
+import io.adrenaline.secrets.sync.SyncList;
 import io.adrenaline.secrets.views.GroupListEntryRelativeLayout;
 
 /**
  * Created by stang6 on 11/4/13.
  */
 public class Secrets {
+    private static final String TAG = "Secrets";
+    private static final String SECRET_GROUPS = "secret_groups";
 
     private Secrets() {
 
@@ -23,7 +31,7 @@ public class Secrets {
 
     /*package*/ static void generateRandomData() {
         for (int i = 0; i < 5; ++i) {
-            Secrets.addSecretGroup(SecretGroupModel.createRandomData());
+            sSecrets.add(SecretGroupModel.createRandomData());
         }
     }
 
@@ -39,20 +47,84 @@ public class Secrets {
         sListener = l;
     }
 
-    public static void setSecretGroups(Collection<SecretGroupModel> collection) {
-        sSecrets = new ArrayList<SecretGroupModel>(collection);
-        updated();
+    public static void sync() {
+        SyncList groupList = new SyncList(SECRET_GROUPS);
+        groupList.get(new SyncList.SyncListCallback() {
+            @Override
+            public void done(List<String> list) {
+                for (String groupId : list) {
+                    syncGroup(groupId);
+                }
+            }
+
+            @Override
+            public void fail(String error) {
+                // TODO
+                Log.w(TAG, "Get secret groups: " + error);
+            }
+        });
     }
 
-    public static void addSecretGroup(SecretGroupModel group) {
-        sSecrets.add(group);
-        updated();
+    private static void syncGroup(final String groupId) {
+        SyncList group = new SyncList(groupId);
+        group.get(new SyncList.SyncListCallback() {
+            @Override
+            public void done(List<String> list) {
+                try {
+                    updateSecretGroup(new SecretGroupModel(list));
+                    Log.d(TAG, "Sync group " + groupId);
+                } catch (JSONException e) {
+                    Log.w(TAG, "Sync group " + groupId + ": " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void fail(String error) {
+                // TODO
+                Log.w(TAG, "Sync group " + groupId + ": " + error);
+            }
+        });
+    }
+
+    public static void addSecretGroup(final SecretGroupModel group) throws JSONException {
+        final String groupId = UUID.randomUUID().toString();
+        SyncList syncGroup = new SyncList(groupId);
+        syncGroup.add(group.toJSONObject().toString(), new SyncList.SyncListCallback() {
+            @Override
+            public void done(List<String> list) {
+                addToGroupList(groupId, group);
+            }
+
+            @Override
+            public void fail(String error) {
+                // TODO
+                Log.w(TAG, "Create group: " + error);
+            }
+        });
+    }
+
+    private static void addToGroupList(String groupId, final SecretGroupModel group) {
+        SyncList groupList = new SyncList(SECRET_GROUPS);
+        groupList.add(groupId, new SyncList.SyncListCallback() {
+            @Override
+            public void done(List<String> list) {
+                updateSecretGroup(group);
+                Log.d(TAG, "Add to group list");
+            }
+
+            @Override
+            public void fail(String error) {
+                // TODO
+                Log.w(TAG, "Add to group list: " + error);
+            }
+        });
     }
 
     public static void updateSecretGroup(SecretGroupModel group) {
-        if (indexOfSecretGroup(group) >= 0) {
-            updated();
+        if (indexOfSecretGroup(group) < 0) {
+            sSecrets.add(group);
         }
+        updated();
     }
 
     public static void removeSecretGroup(SecretGroupModel group) {
@@ -97,7 +169,7 @@ public class Secrets {
 
         private SecretsAdapter() {
             if (Secrets.numOfGroups() == 0) {
-                Secrets.generateRandomData();
+                // Secrets.generateRandomData();
             }
         }
 
