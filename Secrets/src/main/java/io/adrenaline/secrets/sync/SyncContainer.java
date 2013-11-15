@@ -1,4 +1,4 @@
-package io.adrenaline.secrets.models;
+package io.adrenaline.secrets.sync;
 
 import android.util.Log;
 
