@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import io.adrenaline.ApiResponse;
 import io.adrenaline.User;
+import io.adrenaline.secrets.models.Secrets;
 
 public class AdrenalineAsync {
     private static final String TAG = "AdrenalineAsync";
@@ -62,6 +63,7 @@ public class AdrenalineAsync {
                     if (!resp.ok()) {
                         mDeferred.fail(resp);
                     } else {
+                        Secrets.sync();
                         mDeferred.done(resp);
                     }
                 }
